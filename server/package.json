@@ -1,0 +1,51 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "main": "./src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint src"
+  },
+  "author": "",
+  "license": "ISC",
+  "private": true,
+  "dependencies": {
+    "apollo-server-express": "^2.9.16",
+    "bcrypt": "^3.0.7",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "graphql": "^14.5.8",
+    "graphql-relay": "^0.6.0",
+    "graphql-tools": "^4.0.6",
+    "knex": "^0.20.8",
+    "lodash": "^4.17.15",
+    "pg": "^7.17.1",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.5"
+  },
+  "devDependencies": {
+    "eslint": "^6.7.2",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "faker": "^4.1.0",
+    "knex-migrate": "^1.7.4",
+    "moment-timezone": "^0.5.27",
+    "nodemon": "^2.0.1",
+    "prettier-eslint": "^9.0.1"
+  }
+}

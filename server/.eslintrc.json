@@ -1,0 +1,51 @@
+{
+  "root": true,
+
+  "env": {
+    "node": true
+  },
+
+  "parserOptions": {
+    "parser": "babel-eslint",
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+
+  "extends": [
+    "standard",
+    "plugin:node/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "prettier",
+    "prettier/standard"
+  ],
+
+  "plugins": ["node", "prettier"],
+
+  "settings": {
+    "import/resolver": {
+      "node": { "extensions": [".js", ".mjs"] }
+    }
+  },
+
+
+  "rules": {
+    "node/no-unsupported-features/es-syntax": ["error", {
+      "ignores": ["modules"]
+    }],
+    "import/order": 2,
+    "import/first": 2,
+    "import/no-mutable-exports": 2,
+    "prefer-const": [2, {
+      "destructuring": "any",
+      "ignoreReadBeforeAssign": false
+    }],
+    "no-lonely-if": 2,
+    "curly": [2, "all"],
+    "require-await": 2,
+    "dot-notation": 2,
+    "no-var": 2,
+    "prettier/prettier": ["error", { "semi": false, "trailingComma": "all" }]
+  }
+
+}

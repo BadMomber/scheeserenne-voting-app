@@ -1,0 +1,33 @@
+// Custom Bootstrap variable overrides go first
+$grid-breakpoints: (
+  xs: 0,
+  sm: 480px,
+  md: 640px,
+  lg: 992px,
+  xl: 1300px
+);
+
+$enable-rounded: false;
+$enable-shadows: true;
+$enable-responsive-font-sizes: true;
+
+$theme-colors: (
+  "primary": #FE2A2A,
+  "secondary": #1A4F70,
+  "info": #319169,
+  "light": #E5D3B3,
+);
+
+// Then include the following
+@import 'bootstrap/scss/bootstrap.scss';
+@import 'bootstrap-vue/src/index.scss';
+
+// Custom SCSS
+.bg-green {
+  background-color: $green;
+  color: $black;
+}
+
+.p-1 {
+  padding: 1rem;
+}

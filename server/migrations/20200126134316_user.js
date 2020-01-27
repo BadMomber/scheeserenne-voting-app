@@ -6,10 +6,7 @@ exports.up = knex =>
     t.string("password")
     t.enum("role", ["admin"]).notNull()
     t.string("first_name").notNull()
-    t.string("last_name")
-      .notNull()
-      .notNull()
-      .defaultTo(true)
+    t.string("last_name").notNull()
     t.timestamps(true, true)
   })
 

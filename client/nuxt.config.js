@@ -16,6 +16,10 @@ export default {
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
   },
+  server: {
+    port: 3000, // default: 3000
+    host: "localhost", // default: localhost
+  },
   /*
    ** Customize the progress-bar color
    */

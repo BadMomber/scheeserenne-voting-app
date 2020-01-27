@@ -1,8 +1,8 @@
 exports.up = knex =>
   knex.schema.createTable("votings", t => {
     t.increments("id")
-    t.string("mac_address")
-      .references("mac_address")
+    t.string("ip")
+      .references("ip")
       .inTable("voters")
     t.integer("scheese_id")
       .references("id")

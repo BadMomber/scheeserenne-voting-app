@@ -3,8 +3,6 @@ import { gql } from "apollo-server-express"
 export const typeDefs = gql`
   enum Role {
     GUEST
-    EMPLOYEE
-    FOREMAN
     ADMIN
   }
 
@@ -16,15 +14,11 @@ export const typeDefs = gql`
     username: String
     firstName: String!
     lastName: String!
-    name: String!
-    employeeNumber: String
-    phone: String
+    name: String
     role: String!
     password: String
-    timesheet: Timesheet
     createdAt: String
     updatedtAt: String
-    isActive: Boolean!
   }
 
   type UserConnection implements Connection {
@@ -42,8 +36,6 @@ export const typeDefs = gql`
     me: User
     users(first: Int, after: String): UserConnection @role(requires: ADMIN)
     userById(id: ID!): User @role(requires: ADMIN)
-    notAssignedEmployees: [User] @role(requires: ADMIN)
-    notAssignedForemen: [User] @role(requires: ADMIN)
   }
 
   type Mutation {
@@ -54,11 +46,7 @@ export const typeDefs = gql`
       email: String
       firstName: String!
       lastName: String!
-      employeeNumber: String!
-      phone: String
-      role: String!
       password: String!
     ): User
-    updateUserName(username: String!): Response
   }
 `

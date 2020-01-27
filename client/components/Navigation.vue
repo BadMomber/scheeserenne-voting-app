@@ -12,6 +12,12 @@
           <b-dropdown-item to="/admin/newscheese">Neue Scheese</b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
+
+      <b-navbar-nav v-if="me" class="ml-auto">
+        <b-nav-item-dropdown :text="me.username" right>
+          <b-dropdown-item @click="logout">Logout</b-dropdown-item>
+        </b-nav-item-dropdown>
+      </b-navbar-nav>
     </b-navbar>
   </div>
 </template>
@@ -29,6 +35,18 @@ import gql from "graphql-tag"
 export default {
   name: "Navigation",
   methods: {},
-  apollo: {},
+  apollo: {
+    me: {
+      query: gql`
+        query me {
+          me {
+            id
+            username
+            role
+          }
+        }
+      `,
+    },
+  },
 }
 </script>

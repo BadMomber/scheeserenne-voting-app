@@ -40,46 +40,6 @@ const userById = async (root, args, ctx) => {
   return user
 }
 
-const notAssignedEmployees = async (root, args, ctx) => {
-  const data = await db("user")
-    .select("user.*")
-    .where({ role: "employee" })
-    .leftJoin("user_jobsite", "user_jobsite.user_id", "user.id")
-    .whereNull("user_jobsite.user_id")
-
-  return data
-}
-
-const notAssignedForemen = async (root, args, ctx) => {
-  const data = await db("user")
-    .select("user.*")
-    .where({ role: "foreman" })
-    .leftJoin("user_jobsite", "user_jobsite.user_id", "user.id")
-    .whereNull("user_jobsite.user_id")
-
-  console.log("notAssignedForemen", data)
-
-  return data
-}
-
-const timesheetForUser = async ({ id }, args, ctx) => {
-  const today = moment()
-  console.log("id", id)
-  const data = await db("timesheet")
-    .select("*")
-    .where({ foreman_id: id })
-    .where("from_date", "<", today)
-    .where("to_date", ">", today)
-    .first()
-    .then(row => {
-      return row
-    })
-
-  console.log("timesheetsForForeman", data)
-
-  return data
-}
-
 const newUser = async (root, args, ctx) => {
   const newUser = {
     username: args.username,
@@ -90,23 +50,6 @@ const newUser = async (root, args, ctx) => {
     phone: args.phone,
     role: args.role,
     password: await hash(args.password, 10),
-  }
-
-  if (args.role === "admin" || args.role === "foreman") {
-    // Send mail with login credentials ...
-    const sender = "cspa@kolasinac.de"
-    const to = INTERN_EMAIL_RECIPIENT
-    const subject = "login credentials for new User" + " " + args.username
-    const text =
-      "New user created: \n" +
-      "Nutzername: " +
-      args.username +
-      "\n" +
-      "Passwort: " +
-      args.password
-    const attachment = null
-
-    mailer(sender, to, subject, text, attachment)
   }
 
   const data = await db
@@ -124,8 +67,6 @@ const newUser = async (root, args, ctx) => {
 
   return data
 }
-
-const updateUserName = (root, { newUserName }, ctx) => {}
 
 const login = async (root, args, ctx) => {
   const user = await db
@@ -168,7 +109,6 @@ export const resolvers = {
   User: {
     // List employees attributes here...
     name: ({ firstName, lastName }) => firstName + " " + lastName,
-    timesheet: timesheetForUser,
     createdAt: ({ createdAt }) => (createdAt ? createdAt.toISOString() : null),
     updatedtAt: ({ updatedtAt }) =>
       updatedtAt ? updatedtAt.toISOString() : null,
@@ -178,14 +118,11 @@ export const resolvers = {
     me: (root, args, { userId }) => userById(root, { id: userId }),
     users,
     userById,
-    notAssignedEmployees,
-    notAssignedForemen,
   },
 
   Mutation: {
     login,
     logout,
     newUser,
-    updateUserName,
   },
 }

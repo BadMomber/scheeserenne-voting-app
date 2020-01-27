@@ -6,5 +6,5 @@ exports.seed = knex => {
     name: faker.internet.userName().toLowerCase(),
   }))
 
-  return knex("user").insert(...scheese)
+  return knex("scheese").insert(...scheese)
 }

@@ -16,3 +16,9 @@ if (process.env.DATABASE_URL == null) {
 export const DATABASE_URL = process.env.DATABASE_URL
 
 export const COOKIE_SECRET = "raihie6ohqueiBohn8taek5nai4tha"
+
+if (process.env.REDIS_URL == null) {
+  throw new ConfigurationError("REDIS_URL")
+}
+
+export const REDIS_URL = process.env.REDIS_URL

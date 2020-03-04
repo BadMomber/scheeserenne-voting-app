@@ -15,6 +15,16 @@ import {
   resolvers as scheeseResolvers,
 } from "./scheese/index.js"
 
+import {
+  typeDefs as voterTypes,
+  resolvers as voterResolvers,
+} from "./voter/index.js"
+
+import {
+  typeDefs as voteTypes,
+  resolvers as voteResolvers,
+} from "./vote/index.js"
+
 const localDefs = gql`
   """
   An object with an ID
@@ -75,7 +85,13 @@ const localDefs = gql`
   }
 `
 
-export const typeDefs = [localDefs, UserTypes, scheeseTypes]
+export const typeDefs = [
+  localDefs,
+  UserTypes,
+  scheeseTypes,
+  voterTypes,
+  voteTypes,
+]
 
 export const resolvers = merge(
   {
@@ -84,6 +100,8 @@ export const resolvers = merge(
   },
   userResolvers,
   scheeseResolvers,
+  voterResolvers,
+  voteResolvers,
 )
 
 export const schemaDirectives = merge({}, userDirectives)

@@ -4,6 +4,7 @@ exports.up = knex =>
     t.string("name")
       .unique()
       .notNull()
+    t.string("picture")
     t.boolean("finished")
       .defaultTo(false)
       .notNull()

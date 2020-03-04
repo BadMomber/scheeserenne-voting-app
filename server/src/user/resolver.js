@@ -36,7 +36,6 @@ const userById = async (root, args, ctx) => {
     .where({ id: args.id })
     .first()
 
-  console.log(user)
   return user
 }
 
@@ -91,6 +90,8 @@ const login = async (root, args, ctx) => {
   ctx.req.session.userId = user.id
 
   ctx.currentUser = user
+
+  // console.log("ctx:", ctx)
 
   return user
 }

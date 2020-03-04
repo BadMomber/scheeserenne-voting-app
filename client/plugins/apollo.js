@@ -2,35 +2,36 @@ import Vue from "vue"
 import VueApollo from "vue-apollo"
 
 import { ApolloClient } from "apollo-client"
-import { ApolloLink } from "apollo-link"
+// import { ApolloLink } from "apollo-link"
 
-import { createHttpLink } from "apollo-link-http"
+// import { createHttpLink } from "apollo-link-http"
 import { InMemoryCache } from "apollo-cache-inmemory"
-import { onError } from "apollo-link-error"
+// import { onError } from "apollo-link-error"
+const { createUploadLink } = require("apollo-upload-client")
 
 // HTTP connection to the API
-const httpLink = createHttpLink({
-  // You should use an absolute URL here
-  uri: "http://localhost:4000/graphql",
-  credentials: "include",
-})
+// const httpLink = createHttpLink({
+//   // You should use an absolute URL here
+//   uri: "http://localhost:4000/graphql",
+//   credentials: "include",
+// })
 
-const errorLink = onError(({ graphQLErrors, networkError }) => {
-  if (graphQLErrors)
-    graphQLErrors.forEach(({ message, locations, path }) =>
-      console.error(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
-      ),
-    )
-  if (networkError) console.error(`[Network error]: ${networkError}`)
-})
+// const errorLink = onError(({ graphQLErrors, networkError }) => {
+//   if (graphQLErrors)
+//     graphQLErrors.forEach(({ message, locations, path }) =>
+//       console.error(
+//         `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+//       ),
+//     )
+//   if (networkError) console.error(`[Network error]: ${networkError}`)
+// })
 
 // Cache implementation
 const cache = new InMemoryCache()
 
 // Create the apollo client
 const apolloClient = new ApolloClient({
-  link: ApolloLink.from([errorLink, httpLink]),
+  link: createUploadLink({ uri: "http://localhost:4000/graphql" }),
   cache,
 })
 

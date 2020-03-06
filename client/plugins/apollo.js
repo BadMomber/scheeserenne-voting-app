@@ -29,8 +29,13 @@ const { createUploadLink } = require("apollo-upload-client")
 // Cache implementation
 const cache = new InMemoryCache()
 
+const uri =
+  process.env.NODE_ENV === "production"
+    ? "/graphql"
+    : "http://localhost:4000/graphql"
+
 const uploadLink = createUploadLink({
-  uri: "http://localhost:4000/graphql", // Apollo Server is served from port 4000
+  uri,
   headers: {
     "keep-alive": "true",
   },

@@ -1,9 +1,8 @@
+import fs from "fs"
 import _ from "lodash"
 import { connectionFromArraySlice, cursorToOffset } from "graphql-relay"
-
+import mime from "mime/lite"
 import db from "../db.js"
-const path = require("path")
-const { createWriteStream } = require("fs")
 
 const scheese = async (root, args, { currentUser }) => {
   const limit = typeof args.first === "undefined" ? "200" : args.first
@@ -69,46 +68,7 @@ const notFinishedScheese = async (root, args, ctx) => {
   return data
 }
 
-// async uploadPhoto (parent, { photo }) {
-//   const { filename, createReadStream } = await photo
-
-//   try {
-//     const result = await new Promise((resolve, reject) => {
-//       createReadStream().pipe(
-//         cloudinary.uploader.upload_stream((error, result) => {
-//           if (error) {
-//             reject(error)
-//           }
-
-//           resolve(result)
-//         })
-//       )
-//     })
-
-//     const newPhoto = { filename, path: result.secure_url }
-
-//     photos.push(newPhoto)
-
-//     return newPhoto
-//   } catch (err) {
-//     console.log(err)
-//   }
-// }
-
 const addScheese = async (root, { name, picture }, ctx) => {
-  // console.log("picture path: ", picturePath)
-  // console.log("picture: ", picture)
-
-  const { createReadStream, filename, mimetype, encoding } = await picture
-  console.log("filename: ", filename)
-  console.log("createReadStream: ", createReadStream)
-
-  await new Promise(() =>
-    createReadStream()
-      .pipe(createWriteStream(path.join(__dirname, "../uploads/", filename)))
-      .on("close"),
-  )
-
   const newScheese = {
     name: name,
     picture: picture,
@@ -130,6 +90,36 @@ const addScheese = async (root, { name, picture }, ctx) => {
   return data
 }
 
+export const uploadFile = async (stream, filename, mimetype) => {
+  const file = await saveFileFromStream(stream, filename, mimetype)
+
+  return file
+}
+
+const saveFileFromStream = (stream, filename, mimetype) => {
+  const ext = mime.getExtension(mimetype).replace("jpeg", "jpg")
+
+  const fname = `${filename}.${ext}`
+
+  const IMG_STORAGE_PATH = "./uploads"
+
+  const path = `${IMG_STORAGE_PATH}/${fname}`
+
+  return new Promise((resolve, reject) =>
+    stream
+      .on("error", error => {
+        if (stream.truncated) {
+          // Delete the truncated file
+          fs.unlinkSync(path)
+        }
+        reject(error)
+      })
+      .pipe(fs.createWriteStream(path))
+      .on("error", error => reject(error))
+      .on("finish", () => resolve({ fname, path })),
+  )
+}
+
 export const resolvers = {
   Scheese: {
     // List scheese attributes here...
@@ -145,5 +135,6 @@ export const resolvers = {
 
   Mutation: {
     addScheese,
+    uploadFile,
   },
 }

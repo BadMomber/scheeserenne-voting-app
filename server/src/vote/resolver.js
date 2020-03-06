@@ -46,9 +46,9 @@ const pointsForScheese = async (root, args, ctx) => {
 
 const addVote = async (root, args, ctx) => {
   const newVote = {
-    voter_id: ctx.currentVoter.id,
+    voter_ip: ctx.ip,
     scheese_id: args.scheeseId,
-    points: args.points,
+    rank: args.points,
   }
 
   const data = await db

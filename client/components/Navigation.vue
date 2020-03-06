@@ -1,13 +1,8 @@
 <template class="navigation">
-  <div>
+  <div v-if="me">
     <b-navbar type="dark">
-      <b-navbar-brand to="/">
-        HOME
-      </b-navbar-brand>
-
       <b-navbar-nav>
-        <b-nav-item v-if="!me" to="/voting">Voting</b-nav-item>
-        <b-nav-item-dropdown v-if="me" text="Adminbereich" right>
+        <b-nav-item-dropdown text="Adminbereich" right>
           <b-dropdown-item to="/admin/newuser">Neuer User</b-dropdown-item>
           <b-dropdown-item to="/admin/newscheese">Neue Scheese</b-dropdown-item>
           <b-dropdown-item to="/admin/results"
@@ -22,7 +17,9 @@
         </b-nav-item-dropdown>
       </b-navbar-nav>
 
-      <b-navbar-nav v-if="me" class="ml-auto">
+      <b-button @click="logMe" />
+
+      <b-navbar-nav class="ml-auto">
         <b-nav-item-dropdown :text="me.username" right>
           <b-dropdown-item @click="logout">Logout</b-dropdown-item>
         </b-nav-item-dropdown>
@@ -50,6 +47,9 @@ export default {
     },
   }),
   methods: {
+    logMe() {
+      console.log("me: ", this.me)
+    },
     async logout(e) {
       e.preventDefault()
 

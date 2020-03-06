@@ -5,14 +5,15 @@ export const typeDefs = gql`
     id: ID!
     name: String!
     finished: Boolean!
-    picture: Photo!
     createdAt: String
     updatedtAt: String
+    pictures: [File]
   }
 
-  type Photo {
+  type File {
     filename: String!
-    path: String!
+    mimetype: String!
+    encoding: String!
   }
 
   type ScheeseConnection implements Connection {
@@ -35,6 +36,7 @@ export const typeDefs = gql`
   }
 
   extend type Mutation {
-    addScheese(name: String!, picture: Upload!): Scheese
+    addScheese(name: String!, picture: String!): Scheese
+    uploadFile(file: Upload!): File!
   }
 `

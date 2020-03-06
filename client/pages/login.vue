@@ -43,7 +43,6 @@ export default {
     error: null,
     username: null,
     password: null,
-    me: undefined,
   }),
   apollo: {
     me: {
@@ -69,7 +68,7 @@ export default {
       try {
         const {
           data: {
-            login: { role },
+            login: { role, id, username },
           },
         } = await this.$apollo.mutate({
           variables: {
@@ -88,15 +87,15 @@ export default {
           `,
         })
 
-        console.log("role", role)
-
-        const path = role === "foreman" ? "/editTimesheet" : "/"
+        const path = "/admin/newscheese"
 
         const client = this.$apolloProvider.defaultClient
 
         this.$router.push(path, () =>
           Promise.all([this.$apolloHelpers.onLogin(client)]),
         )
+
+        console.log("role", role, id, username)
       } catch (e) {
         console.error("login error", e)
         this.error = e.message

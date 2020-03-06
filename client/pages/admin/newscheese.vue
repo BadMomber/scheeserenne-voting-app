@@ -20,7 +20,7 @@
             Selected file: {{ picture ? picture.name : "" }}
           </div>
 
-          <b-button class="mt-5" variant="success" @click="addScheese"
+          <b-button class="mt-5" variant="success" @click="uploadFile"
             >Speichern</b-button
           >
           <b-button class="mt-5" type="reset" variant="danger"
@@ -43,7 +43,6 @@ label {
 
 <script>
 import gql from "graphql-tag"
-import UPLOAD_PHOTO from "../../graphql/uploadPhoto"
 
 export default {
   data: () => ({
@@ -53,26 +52,30 @@ export default {
     selectedFile: undefined,
   }),
   methods: {
-    async uploadPhoto(event) {
+    async uploadFile(event) {
       await this.$apollo.mutate({
-        mutation: UPLOAD_PHOTO,
+        mutation: gql`
+          mutation uploadFile($file: Upload!) {
+            uploadFile(file: $file) {
+              filename
+              mimetype
+              encoding
+            }
+          }
+        `,
         variables: {
-          photo: target.files[0],
+          file: this.selectedFile,
         },
       })
-      console.log("target: ", event.target)
       console.log("event: ", event)
     },
     setSelectedFile(event) {
       this.selectedFile = event.target.files[0]
       console.log("file changed: ", this.selectedFile)
     },
-    onUpload() {
-      console.log("file: ", this.selectedFile)
-      // upload file
-    },
     async addScheese(e) {
       e.preventDefault()
+      this.uploadFile()
 
       console.log("picture: ", this.selectedFile)
 
@@ -85,7 +88,7 @@ export default {
         } = await this.$apollo.mutate({
           variables: {
             name: this.name,
-            picture: this.selectedFile,
+            picture: this.selectedFile.filename,
           },
           mutation: gql`
             mutation addScheese($name: String!, $picture: Upload!) {

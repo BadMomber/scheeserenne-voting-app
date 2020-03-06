@@ -40,7 +40,7 @@ module.exports = {
 
   deploy : {
     production : {
-      user : 'app',
+      user : 'kersten',
       host : '192.168.178.65',
       ref  : 'origin/master',
       repo : 'git@github.com:BadMomber/scheeserenne-voting-app.git',

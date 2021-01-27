@@ -8,6 +8,7 @@ exports.up = knex =>
     t.boolean("finished")
       .defaultTo(false)
       .notNull()
+    t.float("value").defaultTo(0)
     t.timestamps(true, true)
   })
 

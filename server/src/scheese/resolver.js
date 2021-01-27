@@ -34,7 +34,7 @@ const scheeseList = async (root, args, ctx) => {
     .then(rows => {
       return rows
     })
-
+  calculateResult()
   return data
 }
 
@@ -118,6 +118,39 @@ const saveFileFromStream = (stream, filename, mimetype) => {
       .on("error", error => reject(error))
       .on("finish", () => resolve({ fname, path })),
   )
+}
+
+const calculateResult = async () => {
+  const scheese = await db("scheese")
+    .select("*")
+    .then(rows => {
+      return rows
+    })
+
+  const pairs = await db("scheese_pairs")
+    .select("*")
+    .then(rows => {
+      return rows
+    })
+
+  scheese.forEach(async scheese => {
+    let value = 0
+
+    // Check this because its wrong
+    // Changed * pair.weight to / pair.weight
+    pairs.forEach(pair => {
+      if (pair.scheeseOne === scheese.id) {
+        value = value + pair.distance / pair.weight
+        console.log("value: ", value)
+      } else if (pair.scheeseTwo === scheese.id) {
+        value = value - pair.distance / pair.weight
+      }
+    })
+
+    await db("scheese")
+      .where({ id: scheese.id })
+      .update({ value: value })
+  })
 }
 
 export const resolvers = {

@@ -11,14 +11,14 @@ export default {
       {
         hid: "description",
         name: "description",
-        content: process.env.npm_package_description || "",
-      },
+        content: process.env.npm_package_description || ""
+      }
     ],
-    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
+    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
   },
   server: {
     port: 3000, // default: 3000
-    host: "localhost", // default: localhost
+    host: "localhost" // default: localhost
   },
   /*
    ** Customize the progress-bar color
@@ -27,14 +27,18 @@ export default {
   /*
    ** Global CSS
    */
-  css: ["@/assets/css/style.scss"],
+  css: [
+    "@/assets/css/style.scss",
+    "@fortawesome/fontawesome-svg-core/styles.css"
+  ],
   /*
    ** Plugins to load before mounting the App
    */
 
   plugins: [
     "~plugins/apollo.js",
-    { src: "~plugins/vuedraggable.js", ssr: false },
+    "~/plugins/fontawesome.js",
+    { src: "~plugins/vuedraggable.js", ssr: false }
   ],
   /*
    ** Nuxt.js dev-modules
@@ -52,15 +56,15 @@ export default {
         imports: [
           {
             set: "@fortawesome/free-solid-svg-icons",
-            icons: ["fas"],
-          },
-        ],
-      },
-    ],
+            icons: ["fas"]
+          }
+        ]
+      }
+    ]
   ],
   bootstrapVue: {
     bootstrapCSS: false, // Or `css: false`
-    bootstrapVueCSS: false, // Or `bvCSS: false`
+    bootstrapVueCSS: false // Or `bvCSS: false`
   },
   /*
    ** Build configuration
@@ -75,6 +79,6 @@ export default {
       //   child_process: "empty",
       // }
       // ....
-    },
-  },
-}
+    }
+  }
+};

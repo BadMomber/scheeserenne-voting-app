@@ -1,4 +1,4 @@
-import { gql } from "apollo-server-express"
+import { gql } from "apollo-server-express";
 
 export const typeDefs = gql`
   type ScheesePair implements Node {
@@ -25,4 +25,4 @@ export const typeDefs = gql`
   extend type Query {
     scheesePairs(first: Int, after: String): ScheesePairConnection
   }
-`
+`;

@@ -1,4 +1,4 @@
-import { gql } from "apollo-server-express"
+import { gql } from "apollo-server-express";
 
 export const typeDefs = gql`
   type Vote implements Node {
@@ -31,4 +31,4 @@ export const typeDefs = gql`
   extend type Mutation {
     addVote(scheeseId: ID, points: Int!): Vote
   }
-`
+`;

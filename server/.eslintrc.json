@@ -45,7 +45,7 @@
     "require-await": 2,
     "dot-notation": 2,
     "no-var": 2,
-    "prettier/prettier": ["error", { "semi": false, "trailingComma": "all" }]
+    "prettier/prettier": ["error", { "semi": true, "trailingComma": "all" }]
   }
 
 }

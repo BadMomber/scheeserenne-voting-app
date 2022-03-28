@@ -27,6 +27,26 @@ const scheesePairs = async (root, args, ctx) => {
   };
 };
 
+// TODO: write function for weight calculation based on number of voted scheese
+function calcWeight(nScheese) {
+  try {
+    if (nScheese <= 1) {
+      throw new Error("nScheese <= 1");
+    }
+    let result = 0;
+    for (let j = 1; j <= nScheese - 1; j++) {
+      for (let i = 1; i <= j; i++) {
+        result = result + i;
+      }
+    }
+    // TODO: result = nScheese / result; may be not required
+    result = nScheese / result;
+    return result;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 const basicWeights = [
   2,
   0.75,
@@ -109,60 +129,50 @@ const result = async (root, args, ctx) => {
 
     for (let i = 0; i < allVotesforVoter.length; i++) {
       for (let j = i + 1; j < allVotesforVoter.length; j++) {
-        console.log(i, j);
-        setTimeout(async function() {
-          console.log("hallo hallo 1");
-          if (allVotesforVoter[i].scheeseId < allVotesforVoter[j].scheeseId) {
-            const scheesePair = allScheesePairs.find(
-              (element) =>
-                element.scheeseOne === allVotesforVoter[i].scheeseId &&
-                element.scheeseTwo === allVotesforVoter[j].scheeseId
-            );
+        if (allVotesforVoter[i].scheeseId < allVotesforVoter[j].scheeseId) {
+          const scheesePair = allScheesePairs.find(
+            (element) =>
+              element.scheeseOne === allVotesforVoter[i].scheeseId &&
+              element.scheeseTwo === allVotesforVoter[j].scheeseId
+          );
 
-            console.log("scheesePair: ", scheesePair);
+          console.log("scheesePair: ", scheesePair);
 
-            scheesePair.weight = scheesePair.weight + 1;
-            scheesePair.distance =
-              scheesePair.distance +
-              (allVotesforVoter[i].rank - allVotesforVoter[j].rank) *
-                basicWeights[allVotesforVoter.length - 2];
+          scheesePair.weight = scheesePair.weight + 1;
+          scheesePair.distance =
+            scheesePair.distance +
+            (allVotesforVoter[i].rank - allVotesforVoter[j].rank) *
+              basicWeights[allVotesforVoter.length - 2];
 
-            // scheesePair.weight =
-            //   scheesePair.weight + basicWeights[allVotesforVoter.length - 2]
-            // scheesePair.distance =
-            //   scheesePair.distance +
-            //   (allVotesforVoter[i].rank - allVotesforVoter[j].rank)
+          await db("scheesePairs")
+            .where({ id: scheesePair.id })
+            .update(scheesePair);
+        } else {
+          console.log("hallo hallo 2 2");
 
-            await db("scheesePairs")
-              .where({ id: scheesePair.id })
-              .update(scheesePair);
-          } else {
-            console.log("hallo hallo 2 2");
+          const scheesePair = allScheesePairs.find(
+            (element) =>
+              element.scheeseOne === allVotesforVoter[j].scheeseId &&
+              element.scheeseTwo === allVotesforVoter[i].scheeseId
+          );
 
-            const scheesePair = allScheesePairs.find(
-              (element) =>
-                element.scheeseOne === allVotesforVoter[j].scheeseId &&
-                element.scheeseTwo === allVotesforVoter[i].scheeseId
-            );
+          scheesePair.weight = scheesePair.weight + 1;
+          scheesePair.distance =
+            scheesePair.distance +
+            (allVotesforVoter[j].rank - allVotesforVoter[i].rank) *
+              basicWeights[allVotesforVoter.length - 2];
 
-            scheesePair.weight = scheesePair.weight + 1;
-            scheesePair.distance =
-              scheesePair.distance +
-              (allVotesforVoter[j].rank - allVotesforVoter[i].rank) *
-                basicWeights[allVotesforVoter.length - 2];
+          // scheesePairTwo.weight =
+          //   scheesePairTwo.weight + basicWeights[allVotesforVoter.length - 2]
+          // scheesePairTwo.distance =
+          //   scheesePairTwo.distance +
+          //   (allVotesforVoter[j].rank - allVotesforVoter[i].rank)
 
-            // scheesePairTwo.weight =
-            //   scheesePairTwo.weight + basicWeights[allVotesforVoter.length - 2]
-            // scheesePairTwo.distance =
-            //   scheesePairTwo.distance +
-            //   (allVotesforVoter[j].rank - allVotesforVoter[i].rank)
-
-            //   console.log("scheesePair: ", scheesePairTwo)
-            await db("scheesePairs")
-              .where({ id: scheesePair.id })
-              .update(scheesePair);
-          }
-        }, 30);
+          //   console.log("scheesePair: ", scheesePairTwo)
+          await db("scheesePairs")
+            .where({ id: scheesePair.id })
+            .update(scheesePair);
+        }
       }
     }
 

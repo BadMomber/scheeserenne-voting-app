@@ -94,13 +94,10 @@
         <b-col cols="12 mt-5">
           <b-button
             class="bottom-absolute-left"
-            variant="warning"
+            variant="success"
             @click="addVotes"
           >
-            Speichern
-          </b-button>
-          <b-button variant="success" @click="addVotes">
-            Senden
+            Neues Ranking speichern
           </b-button>
         </b-col>
       </b-row>

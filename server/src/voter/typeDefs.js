@@ -4,7 +4,6 @@ export const typeDefs = gql`
   type Voter implements Node {
     id: ID!
     hash: String
-    termsAccepted: Boolean!
     hasVoted: Boolean!
     votes: [Vote]
     createdAt: String
@@ -25,7 +24,6 @@ export const typeDefs = gql`
   extend type Query {
     voters(first: Int, after: String): VoterConnection @role(requires: ADMIN)
     voterById(id: ID!): Voter @role(requires: ADMIN)
-    voterByIp: Voter
   }
 
   extend type Mutation {

@@ -1,23 +1,23 @@
-import _ from "lodash"
-import { connectionFromArraySlice, cursorToOffset } from "graphql-relay"
-import { compare, hash } from "bcrypt"
+import _ from "lodash";
+import { connectionFromArraySlice, cursorToOffset } from "graphql-relay";
+import { compare, hash } from "bcrypt";
 
-import db from "../db.js"
+import db from "../db.js";
 
 const voters = async (root, args, { currentUser }) => {
-  const limit = typeof args.first === "undefined" ? "200" : args.first
-  const offset = args.after ? cursorToOffset(args.after) + 1 : 0
+  const limit = typeof args.first === "undefined" ? "200" : args.first;
+  const offset = args.after ? cursorToOffset(args.after) + 1 : 0;
 
   const data = await db
     .table("voters")
     .select("*", db.raw("count(*) OVER() as total_count"))
     .limit(limit)
     .offset(offset)
-    .then(rows => {
-      return rows
-    })
+    .then((rows) => {
+      return rows;
+    });
 
-  const totalCount = data[0] ? parseInt(data[0].totalCount) : 0
+  const totalCount = data[0] ? parseInt(data[0].totalCount) : 0;
 
   return {
     ...connectionFromArraySlice(data, args, {
@@ -25,75 +25,75 @@ const voters = async (root, args, { currentUser }) => {
       arrayLength: totalCount,
     }),
     totalCount,
-  }
-}
+  };
+};
 
 const voterById = async (root, args, ctx) => {
   const voter = await db("voters")
     .where({ id: args.id })
-    .first()
+    .first();
 
-  return voter
-}
+  return voter;
+};
 
 const getVotersVotings = async (root, args, ctx) => {
   const data = await db("votings")
     .select("*")
     .where({ voter_id: args.id })
-    .then(rows => {
-      return rows
-    })
+    .then((rows) => {
+      return rows;
+    });
 
-  return data
-}
+  return data;
+};
 
-const voterByIp = async (root, args, ctx) => {
-  const data = await db("voters")
-    .select("*")
-    .where({ ip: ctx.ip })
-    .first()
+// const voterByIp = async (root, args, ctx) => {
+//   const data = await db("voters")
+//     .select("*")
+//     .where({ ip: ctx.ip })
+//     .first()
 
-  console.log("ctx ip:", ctx.ip)
-  console.log("voter:", data)
-  return data
-}
+//   console.log("ctx ip:", ctx.ip)
+//   console.log("voter:", data)
+//   return data
+// }
 
 const addVoter = async (root, args, ctx) => {
   const newVoter = {
-    ip: ctx.ip,
+    hash: args.hash,
     termsAccepted: args.termsAccepted,
-  }
+  };
 
   const data = await db
     .insert(newVoter)
     .returning("id")
     .into("voters")
-    .then(async id => {
+    .then(async (id) => {
       const createdVoter = await db("voters")
         .select("*")
         .where({ id: id.toString() })
-        .first()
+        .first();
 
-      return createdVoter
-    })
+      return createdVoter;
+    });
 
-  ctx.req.session.voterId = data.id
-  ctx.currentVoter = data
+  ctx.req.session.voterId = data.id;
+  ctx.currentVoter = data;
 
-  console.log("ctx.req.session.voterId", ctx.req.session.voterId)
-  console.log("ctx currentVoter:", ctx.currentVoter)
-  console.log("addVoter returned data:", data)
+  console.log("ctx.req.session.voterId", ctx.req.session.voterId);
+  console.log("ctx currentVoter:", ctx.currentVoter);
+  console.log("addVoter returned data:", data);
   // console.log("addVoter sessionId:", ctx.sessionId)
-  return data
-}
+  return data;
+};
 
 const setHasVoted = async (root, args, ctx) => {
   const data = await db("voters")
-    .where({ ip: ctx.ip })
-    .update({ has_voted: args.voted })
+    .where({ hash: args.hash })
+    .update({ has_voted: args.voted });
 
-  return data
-}
+  return data;
+};
 
 export const resolvers = {
   Voter: {
@@ -107,11 +107,10 @@ export const resolvers = {
   Query: {
     voters,
     voterById,
-    voterByIp,
   },
 
   Mutation: {
     addVoter,
     setHasVoted,
   },
-}
+};

@@ -58,3 +58,7 @@ $ npm run dev
 ## use app environment
 
 you will find the frontend on localhost:3000 and server on localhost:4000
+
+## restart postgres
+brew services stop postgresql  
+brew services start postgresql  

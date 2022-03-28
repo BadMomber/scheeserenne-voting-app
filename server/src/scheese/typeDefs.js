@@ -1,4 +1,4 @@
-import { gql } from "apollo-server-express"
+import { gql } from "apollo-server-express";
 
 export const typeDefs = gql`
   type Scheese implements Node {
@@ -37,6 +37,7 @@ export const typeDefs = gql`
 
   extend type Mutation {
     addScheese(name: String!, picture: String!): Scheese
+    removeScheese(id: String!): User @role(requires: ADMIN)
     uploadFile(file: Upload!): File!
   }
-`
+`;

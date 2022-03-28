@@ -1,9 +1,9 @@
-import { gql } from "apollo-server-express"
+import { gql } from "apollo-server-express";
 
 export const typeDefs = gql`
   type Voter implements Node {
     id: ID!
-    ip: String
+    hash: String
     termsAccepted: Boolean!
     hasVoted: Boolean!
     votes: [Vote]
@@ -32,4 +32,4 @@ export const typeDefs = gql`
     addVoter(termsAccepted: Boolean!): Voter
     setHasVoted(voted: Boolean!): Boolean
   }
-`
+`;

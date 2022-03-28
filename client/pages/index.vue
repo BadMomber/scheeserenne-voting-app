@@ -1,25 +1,6 @@
 <template>
   <div>
-    <b-container v-if="!getVoter" id="pre-content">
-      <b-row>
-        <b-col cols="12 mt-5">
-          <h3>
-            Dies ist eine öffentliche & vollkommen anonyme Abstimmung.
-            <br /><br />Es werden keine Personen- oder Gerätebezogenen
-            Informationen gespeichert.
-          </h3>
-        </b-col>
-        <b-col cols="12 mt-5">
-          <b-button variant="success" @click="addVoter">
-            <span class="text-uppercase font-weight-bold"
-              >Okay - Ich will abstimmen</span
-            >
-          </b-button>
-        </b-col>
-      </b-row>
-    </b-container>
-
-    <b-container v-else id="main-content">
+    <b-container id="main-content">
       <b-row class="justify-content-center">
         <b-col cols="11">
           <div class="display-flex">
@@ -63,7 +44,7 @@
                   backgroundImage:
                     'url(' + require('@/assets/images/platzhalter.jpg') + ')',
                 }"
-              />
+              ></span>
               <span class="right">
                 <span class="rem2">{{ item.name }}</span
                 ><br />
@@ -99,11 +80,9 @@
             >
               <span
                 class="platzhalter left"
-                :style="{
-                  backgroundImage:
-                    'url(' + require('@/assets/images/platzhalter.jpg') + ')',
-                }"
+                :style="{'background-image':'url(https://vuejs.org/images/logo.png)'}"
               />
+              <img id="scheeseImg" :src="'assets/images/platzhalter.jpg'">
               <span class="right">
                 <span class="rem2">{{ item.name }}</span
                 ><br />
@@ -151,6 +130,10 @@
   background-color: var(--warning);
   border-radius: 50%;
   color: #000;
+}
+
+#scheeseImg {
+  width: 100px;
 }
 
 .red {

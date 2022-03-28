@@ -33,3 +33,28 @@ seed your dev data to the database - in server dir type
 ```
 $ knex seed:run
 ```
+
+run server - in server dir type
+
+```
+$ npm run dev
+```
+
+## run client
+
+cd to client dir  
+make sure to use node version 12.xx - type
+
+```
+$ nvm use 12
+```
+
+start client - in client dir type
+
+```
+$ npm run dev
+```
+
+## use app environment
+
+you will find the frontend on localhost:3000 and server on localhost:4000

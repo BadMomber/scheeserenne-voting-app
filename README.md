@@ -1,6 +1,6 @@
 # run app
 
-make sure you have node 12.xx active - type in the project root dir
+make sure you have node 12.xx active - in the project root dir type
 
 ```
 $ nvm use 12
@@ -22,13 +22,13 @@ $ CREATE DATABASE sva;
 $ \q
 ```
 
-migrate you tables to database - type
+migrate you tables to database - in server dir type
 
 ```
 $ knex migrate:latest
 ```
 
-seed your dev data to the database - type
+seed your dev data to the database - in server dir type
 
 ```
 $ knex seed:run

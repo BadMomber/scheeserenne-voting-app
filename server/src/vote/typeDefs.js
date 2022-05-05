@@ -29,6 +29,6 @@ export const typeDefs = gql`
   }
 
   extend type Mutation {
-    addVote(scheeseId: ID, points: Int!): Vote
+    addVote(scheeseId: ID, voter_hash: String!, points: Int!): Vote
   }
 `;

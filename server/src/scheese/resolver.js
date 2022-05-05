@@ -68,12 +68,11 @@ const notFinishedScheese = async (root, args, ctx) => {
   return data;
 };
 
-const addScheese = async (root, { name, picture }, ctx) => {
+const addScheese = async (root, { name }, ctx) => {
   const newScheese = {
     name: name,
-    picture: picture,
   };
-
+  console.log("hello");
   const data = await db
     .insert(newScheese)
     .returning("id")
@@ -91,43 +90,11 @@ const addScheese = async (root, { name, picture }, ctx) => {
 };
 
 const removeScheese = async (root, { id }, ctx) => {
-  const data = await db("scheese")
-    .where("id", id)
-    .del();
-
-  console.log(data);
-
-  return data.id;
-};
-
-export const uploadFile = async (stream, filename, mimetype) => {
-  const file = await saveFileFromStream(stream, filename, mimetype);
-
-  return file;
-};
-
-const saveFileFromStream = (stream, filename, mimetype) => {
-  const ext = mime.getExtension(mimetype).replace("jpeg", "jpg");
-
-  const fname = `${filename}.${ext}`;
-
-  const IMG_STORAGE_PATH = "./uploads";
-
-  const path = `${IMG_STORAGE_PATH}/${fname}`;
-
-  return new Promise((resolve, reject) =>
-    stream
-      .on("error", (error) => {
-        if (stream.truncated) {
-          // Delete the truncated file
-          fs.unlinkSync(path);
-        }
-        reject(error);
-      })
-      .pipe(fs.createWriteStream(path))
-      .on("error", (error) => reject(error))
-      .on("finish", () => resolve({ fname, path }))
-  );
+  // const data = await db("scheese")
+  //   .where("id", id)
+  //   .del();
+  // console.log("removeScheese " + new Date());
+  // return data.id;
 };
 
 const calculateResult = async () => {
@@ -151,7 +118,7 @@ const calculateResult = async () => {
     pairs.forEach((pair) => {
       if (pair.scheeseOne === scheese.id) {
         value = value + pair.distance / pair.weight;
-        console.log("value: ", value);
+        // console.log("value: ", value);
       } else if (pair.scheeseTwo === scheese.id) {
         value = value - pair.distance / pair.weight;
       }
@@ -178,7 +145,6 @@ export const resolvers = {
 
   Mutation: {
     addScheese,
-    uploadFile,
     removeScheese,
   },
 };

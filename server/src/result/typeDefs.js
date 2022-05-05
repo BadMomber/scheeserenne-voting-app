@@ -3,10 +3,11 @@ import { gql } from "apollo-server-express";
 export const typeDefs = gql`
   type ScheesePair implements Node {
     id: ID!
-    scheeseA: ID!
-    scheeseB: ID!
+    scheeseOne: ID!
+    scheeseTwo: ID!
     weight: Int!
     distance: Int!
+    normedDistance: Int!
     createdAt: String!
     updatedAt: String
   }
@@ -23,6 +24,6 @@ export const typeDefs = gql`
   }
 
   extend type Query {
-    scheesePairs(first: Int, after: String): ScheesePairConnection
+    scheesePairs: [ScheesePair]
   }
 `;

@@ -2,14 +2,28 @@
   <div>
     <b-container id="main-content">
       <b-row class="justify-content-center">
-        <b-col cols="11">
+        <!-- <b-col cols="11">
           <div class="display-flex">
             <h4 class="heading-bg">
               Man of the Match
             </h4>
             <h4 id="help" class="shadow">?</h4>
           </div>
-        </b-col>
+        </b-col> -->
+
+        <b-col cols="12 mt-5">
+        <b-form>
+          <label class="mt-5" for="new-scheese-name"
+            >Code: {{voter_hash}} </label
+          >
+          <b-form-input id="new-scheese-name" v-model="voter_hash" />
+
+          <b-button @click="addHash" class="mt-5" type="reset" variant="success"
+            >Code speichern</b-button
+          >
+        </b-form>
+      </b-col>
+
         <b-col cols="12 mt-2">
           <!-- https://sortablejs.github.io/Vue.Draggable/#/transition-example-2 -->
           <div v-if="ratedScheese.length === 0" class="p-2">
@@ -42,11 +56,13 @@
                 class="platzhalter left"
                 :style="{
                   backgroundImage:
-                    'url(' + require('@/assets/images/platzhalter.jpg') + ')',
+                    'url(' + item.image + ')',
                 }"
               ></span>
               <span class="right">
                 <span class="rem2">{{ item.name }}</span
+                ><br />
+                <span class="rem2">{{ item.id }}</span
                 ><br />
                 <b-badge variant="success" class="rem2 align-left rank"
                   >Rang: {{ index + 1 }}</b-badge
@@ -78,13 +94,11 @@
               class="list-group-item shadow display-flex not-rated"
               :v-bind="item.id"
             >
-              <span
-                class="platzhalter left"
-                :style="{'background-image':'url(https://vuejs.org/images/logo.png)'}"
-              />
-              <img id="scheeseImg" :src="'assets/images/platzhalter.jpg'">
+              <img class ="platzhalter left" id="scheeseImg" :src="item.image">
               <span class="right">
                 <span class="rem2">{{ item.name }}</span
+                ><br />
+                <span class="rem2">{{ item.id }}</span
                 ><br />
                 <span class="rem2 align-left rank">Rang: {{ index + 1 }}</span>
               </span>
@@ -93,7 +107,7 @@
         </b-col>
         <b-col cols="12 mt-5">
           <b-button
-            class="bottom-absolute-left"
+            class="bottom-absolute-left mb-5"
             variant="success"
             @click="addVotes"
           >
@@ -293,18 +307,18 @@ export default {
           scheeseList {
             id
             name
+            image
             finished
           }
         }
       `,
     },
-    voterByIp: {
+    voterList: {
       query: gql`
-        query voterByIp {
-          voterByIp {
+        query voterList {
+          voterList {
             id
-            ip
-            termsAccepted
+            voterHash
             hasVoted
           }
         }
@@ -317,86 +331,100 @@ export default {
     },
     scheeseList: [],
     ratedScheese: [],
+    voter_hash: undefined,
+    voterByHash: undefined,
+    // voterById: undefined,
+    voterList: undefined,
+    id: 1,
   }),
   computed: {
     maxPoints() {
       return this.scheeseList.length
     },
-    getVoter() {
-      return this.voterByIp
-    },
+    voterHashList() {
+      return this.voterList.map((e) => (
+        e.voterHash
+      ))
+    }
   },
-  watch: {
-    voterByIp: {
-      deep: true,
-      handler(voterByIp) {
-        // console.log("update user", Object.keys(user), Object.values(user))
-        // console.log("user:", user)
-        this.$emit("input", voterByIp)
-      },
-    },
+  // watch: {
+  //   voterByHash: {
+  //     deep: true,
+  //     handler(voterByHash) {
+  //       // console.log("update user", Object.keys(user), Object.values(user))
+  //       // console.log("user:", user)
+  //       this.$emit("input", voterByHash)
+  //     },
+  //   },
+  // },
+  variables() {
+    return {
+      id: this.id,
+    }
   },
   methods: {
     log(evt) {
       window.console.log(evt)
-      console.log("ratedScheese length: ", this.ratedScheese.length)
-      console.log("notRatedScheese length: ", this.scheeseList.length)
+      // console.log("ratedScheese length: ", this.ratedScheese.length)
+      // console.log("notRatedScheese length: ", this.scheeseList.length)
     },
-    async addVoter(e) {
-      e.preventDefault()
+    addHash() {
+      this.validateHash()
+      // const result = await this.$apollo.queries.voterById.refetch( { id: 1 } )
+    },
+    validateHash() {
+      console.log("addHash")
+      console.log("this.voterList", this.voterList)
+      console.log("this.voter_hash", this.voter_hash)
+      // const voterHashList = this.voterList.map((e) => (
+      //   e.voterHash
+      // ))
+      console.log("voterHashList", this.voterHashList)
+      const validHash = this.voterHashList.indexOf(this.voter_hash)
+      console.log("validHash", validHash)
 
-      this.error = null
-      try {
-        await this.$apollo
-          .mutate({
-            variables: {
-              termsAccepted: true,
-            },
-            mutation: gql`
-              mutation addVoter($termsAccepted: Boolean!) {
-                addVoter(termsAccepted: $termsAccepted) {
-                  id
-                }
-              }
-            `,
-            update: voterByIp => this.voterByIp,
-          })
-          .then(this.$apollo.queries.voterByIp.refetch())
-      } catch (e) {
-        console.log("error", e)
-      }
+      return validHash
     },
     sort() {
       this.scheeseList = this.scheeseList.sort((a, b) => a.order - b.order)
     },
     pointMapper(index) {
-      console.log("index:", index)
+      // console.log("index:", index)
       return this.maxPoints - index
     },
     calculatePoints(evt) {
-      console.log(this.ratedScheese)
+      // console.log(this.ratedScheese)
     },
     async addVotes(e) {
       e.preventDefault()
+      // TODO: Add delete votes here
+      // console.log("this.hash", this.hash)
       this.error = null
       try {
-        await this.ratedScheese.forEach(async (scheese, index) => {
-          console.log("_points:", index)
-          console.log("_scheese:", scheese)
+        if(this.validateHash() != -1) {
+          await this.ratedScheese.forEach(async (scheese, index) => {
+          // console.log("_points:", index)
+          // console.log("_scheese:", scheese)
           await this.$apollo.mutate({
             variables: {
               scheeseId: scheese.id,
+              voter_hash: this.voter_hash,
               points: this.ratedScheese.length - index,
             },
             mutation: gql`
-              mutation addVote($scheeseId: ID!, $points: Int!) {
-                addVote(scheeseId: $scheeseId, points: $points) {
+              mutation addVote($scheeseId: ID!, $voter_hash: String!, $points: Int!) {
+                addVote(scheeseId: $scheeseId, voter_hash: $voter_hash, points: $points) {
                   id
                 }
               }
             `,
           })
         })
+        } else {
+          throw new Error("invalid voter code")
+        }
+
+        console.log("this", this.scheeseList)
         this.setHasVoted(e)
       } catch (e) {
         console.log("error", e)
@@ -409,11 +437,12 @@ export default {
       try {
         await this.$apollo.mutate({
           variables: {
+            voter_hash: this.voter_hash,
             voted: true,
           },
           mutation: gql`
-            mutation setHasVoted($voted: Boolean!) {
-              setHasVoted(voted: $voted)
+            mutation setHasVoted($voter_hash: String!, $voted: Boolean!) {
+              setHasVoted(voter_hash: $voter_hash, voted: $voted)
             }
           `,
         })

@@ -7,13 +7,7 @@ export const typeDefs = gql`
     finished: Boolean!
     createdAt: String
     updatedtAt: String
-    pictures: [File]
-  }
-
-  type File {
-    filename: String!
-    mimetype: String!
-    encoding: String!
+    image: String
   }
 
   type ScheeseConnection implements Connection {
@@ -30,14 +24,13 @@ export const typeDefs = gql`
   extend type Query {
     scheese(first: Int, after: String): ScheeseConnection @role(requires: ADMIN)
     scheeseList: [Scheese]
-    scheeseById(id: ID!): Scheese @role(requires: ADMIN)
-    finishedScheese: [Scheese] @role(requires: ADMIN)
-    notFinishedScheese: [Scheese] @role(requires: ADMIN)
+    scheeseById(id: ID!): Scheese
+    finishedScheese: [Scheese]
+    notFinishedScheese: [Scheese]
   }
 
   extend type Mutation {
-    addScheese(name: String!, picture: String!): Scheese
-    removeScheese(id: String!): User @role(requires: ADMIN)
-    uploadFile(file: Upload!): File!
+    addScheese(name: String!): Scheese
+    removeScheese(id: String!): Scheese
   }
 `;

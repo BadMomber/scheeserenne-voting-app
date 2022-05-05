@@ -28,12 +28,13 @@ const voters = async (root, args, { currentUser }) => {
   };
 };
 
-const voterById = async (root, args, ctx) => {
-  const voter = await db("voters")
-    .where({ id: args.id })
-    .first();
-
-  return voter;
+const voterList = async (root, args, ctx) => {
+  const data = await db("voters")
+    .select("*")
+    .then((rows) => {
+      return rows;
+    });
+  return data;
 };
 
 const getVotersVotings = async (root, args, ctx) => {
@@ -46,17 +47,6 @@ const getVotersVotings = async (root, args, ctx) => {
 
   return data;
 };
-
-// const voterByIp = async (root, args, ctx) => {
-//   const data = await db("voters")
-//     .select("*")
-//     .where({ ip: ctx.ip })
-//     .first()
-
-//   console.log("ctx ip:", ctx.ip)
-//   console.log("voter:", data)
-//   return data
-// }
 
 const addVoter = async (root, args, ctx) => {
   const newVoter = {
@@ -80,16 +70,12 @@ const addVoter = async (root, args, ctx) => {
   ctx.req.session.voterId = data.id;
   ctx.currentVoter = data;
 
-  console.log("ctx.req.session.voterId", ctx.req.session.voterId);
-  console.log("ctx currentVoter:", ctx.currentVoter);
-  console.log("addVoter returned data:", data);
-  // console.log("addVoter sessionId:", ctx.sessionId)
   return data;
 };
 
 const setHasVoted = async (root, args, ctx) => {
   const data = await db("voters")
-    .where({ hash: args.hash })
+    .where({ voter_hash: args.voter_hash })
     .update({ has_voted: args.voted });
 
   return data;
@@ -106,7 +92,7 @@ export const resolvers = {
 
   Query: {
     voters,
-    voterById,
+    voterList,
   },
 
   Mutation: {

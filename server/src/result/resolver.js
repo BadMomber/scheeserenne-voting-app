@@ -5,6 +5,8 @@ const scheesePairs = async (root, args, ctx) => {
   const limit = typeof args.first === "undefined" ? "200" : args.first;
   const offset = args.after ? cursorToOffset(args.after) + 1 : 0;
 
+  console.log("in sheePairs " + new Date());
+
   const data = await db
     .table("scheesePairs")
     .select("*", db.raw("count(*) OVER() as total_count"))
@@ -18,13 +20,17 @@ const scheesePairs = async (root, args, ctx) => {
 
   const totalCount = data[0] ? parseInt(data[0].totalCount) : 0;
 
-  return {
-    ...connectionFromArraySlice(data, args, {
-      sliceStart: offset,
-      arrayLength: totalCount,
-    }),
-    totalCount,
-  };
+  console.log("data", data);
+
+  return data;
+
+  // return {
+  //   ...connectionFromArraySlice(data, args, {
+  //     sliceStart: offset,
+  //     arrayLength: totalCount,
+  //   }),
+  //   totalCount,
+  // };
 };
 
 // TODO: write function for weight calculation based on number of voted scheese
@@ -64,10 +70,10 @@ const basicWeights = [
   6 / 224,
 ];
 
-const getResultsForOneVoter = async (voterIp) => {
+const getResultsForOneVoter = async (voterHash) => {
   const data = await db("votings")
     .select("*")
-    .where({ voter_ip: voterIp })
+    .where({ voter_hash: voterHash })
     .then((rows) => {
       return rows;
     });
@@ -95,7 +101,7 @@ const result = async (root, args, ctx) => {
     });
 
   const allVoters = await db("voters")
-    .pluck("ip")
+    .pluck("hash")
     .then((rows) => {
       return rows;
     });
@@ -105,22 +111,6 @@ const result = async (root, args, ctx) => {
     .then((rows) => {
       return rows;
     });
-
-  // console.log("votes length: ", allVotes.length)
-
-  // const populateScheesePairs = () => {
-  //   for (let i = 0; i < allScheese.length; i++) {
-  //     for (let j = i + 1; j < allScheese.length; j++) {
-  //       const scheesePair = {
-  //         scheese_one: allScheese[i].id,
-  //         scheese_two: allScheese[j].id,
-  //         weight: 0,
-  //         distance: 0,
-  //       }
-  //       const data = db("scheesePairs").insert(scheesePair)
-  //     }
-  //   }
-  // }
 
   const countVotes = async (voterIp) => {
     const allVotesforVoter = await getResultsForOneVoter(voterIp);
@@ -179,7 +169,7 @@ const result = async (root, args, ctx) => {
     return allScheesePairs;
   };
 
-  //   console.log("allVoters: ", allVoters)
+  console.log("allVoters: ", allVoters);
 
   allVoters.forEach(async (voter) => {
     await countVotes(voter);

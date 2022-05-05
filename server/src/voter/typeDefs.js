@@ -3,7 +3,7 @@ import { gql } from "apollo-server-express";
 export const typeDefs = gql`
   type Voter implements Node {
     id: ID!
-    hash: String
+    voterHash: String
     hasVoted: Boolean!
     votes: [Vote]
     createdAt: String
@@ -22,12 +22,12 @@ export const typeDefs = gql`
   }
 
   extend type Query {
-    voters(first: Int, after: String): VoterConnection @role(requires: ADMIN)
-    voterById(id: ID!): Voter @role(requires: ADMIN)
+    voters(first: Int, after: String): VoterConnection
+    voterList: [Voter]
   }
 
   extend type Mutation {
     addVoter(termsAccepted: Boolean!): Voter
-    setHasVoted(voted: Boolean!): Boolean
+    setHasVoted(voter_hash: String!, voted: Boolean!): Boolean
   }
 `;

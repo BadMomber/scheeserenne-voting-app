@@ -2,7 +2,7 @@ exports.up = (knex) =>
   knex.schema.createTable("votings", (t) => {
     t.increments("id");
     t.string("voter_hash")
-      .references("hash")
+      .references("voter_hash")
       .inTable("voters");
     t.integer("scheese_id")
       .references("id")

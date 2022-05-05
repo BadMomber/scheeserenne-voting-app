@@ -14,8 +14,7 @@
             group="scheese"
           >
             <li
-              v-for="(item, index) in scheeseList"
-              :id="'item' + index"
+              v-for="(item) in scheeseList"
               :key="item.id"
               class="list-group-item shadow display-flex not-rated"
               :v-bind="item.id"
@@ -33,7 +32,6 @@
               <span class="right">
                 <span class="rem2">{{ item.name }}</span
                 ><br />
-                <span class="rem2 align-left rank">Rang: {{ index + 1 }}</span>
               </span>
             </li>
           </ul>
@@ -76,8 +74,27 @@ export default {
   },
   methods: {
 
+    async calcResult() {
+      this.error = null
+      try {
+        await this.$apollo.mutate({
+          variables: {
+            id: scheese.id,
+          },
+          mutation: gql`
+            mutation calcResult($id: String!) {
+              calcResult(id: $id) {
+                id
+              }
+            }
+          `,
+        })
+      } catch (e) {
+        console.log("error", e)
+      }
+    },
+
     async removeScheese(scheese) {
-      console.log("scheese", scheese)
       this.error = null
       try {
         await this.$apollo.mutate({

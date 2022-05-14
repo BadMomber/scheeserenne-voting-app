@@ -115,7 +115,7 @@ export const resolvers = merge(
   voterResolvers,
   voteResolvers,
   scheeseListResolvers,
-  votingStatiResolvers
+  votingStatiResolvers,
 );
 
 export const schemaDirectives = merge({}, userDirectives);
@@ -127,7 +127,7 @@ export const server = new ApolloServer({
   typeDefs,
   resolvers,
   schemaDirectives,
-  formatError: (e) => {
+  formatError: e => {
     console.error(e);
     return e;
   },

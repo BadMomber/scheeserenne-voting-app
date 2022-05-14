@@ -12,8 +12,8 @@ export const typeDefs = gql`
   }
 
   input VoteInput {
-    voterId: ID
     scheeseId: ID
+    voter_hash: String!
     rank: Int!
     points: Float!
   }
@@ -37,12 +37,6 @@ export const typeDefs = gql`
   }
 
   extend type Mutation {
-    addVote(
-      scheeseId: ID
-      voter_hash: String!
-      rank: Int!
-      points: Float!
-    ): Vote
     addVotes(votes: [VoteInput]!): [Vote]
   }
 `;

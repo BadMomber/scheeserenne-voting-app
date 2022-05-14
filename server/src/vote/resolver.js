@@ -45,56 +45,28 @@ const pointsForScheese = async (root, args, ctx) => {
 
 const addVotes = async (root, args, ctx) => {
   // Delete all Votes with given hash before saving new one
+  console.log("args", args);
   const delData = await db("votings")
-    .where("voter_hash", args.voter_hash)
+    .where("voter_hash", args.votes[0].voter_hash)
     .del();
 
   console.log("delData", delData);
+  console.log("args.votes", args.votes);
   const data = await db
     .insert([...args.votes])
-    .returning("id")
+    .returning("voter_hash")
     .into("votings")
-    .then(async id => {
+    .then(async voterHash => {
       const createdVotes = await db("votings")
         .select("*")
-        .where({ id: id.toString() })
+        .where({ voter_hash: voterHash.toString() })
         .first();
 
       console.log("createdVote", createdVotes);
       return createdVotes;
     });
 
-  return data;
-};
-
-const addVote = async (root, args, ctx) => {
-  // Delete all Votes with given hash before saving new one
-  const delData = await db("votings")
-    .where("voter_hash", args.voter_hash)
-    .del();
-
-  const newVote = {
-    voter_hash: args.voter_hash,
-    scheese_id: args.scheeseId,
-    rank: args.rank,
-    points: args.points,
-  };
-
-  const data = await db
-    .insert(newVote)
-    .returning("id")
-    .into("votings")
-    .then(async id => {
-      const createdVote = await db("votings")
-        .select("*")
-        .where({ id: id.toString() })
-        .first();
-
-      console.log("createdVote", createdVote);
-      return createdVote;
-    });
-
-  console.log("true");
+  console.log("addVotes data", data);
   return data;
 };
 
@@ -114,7 +86,6 @@ export const resolvers = {
   },
 
   Mutation: {
-    addVote,
     addVotes,
   },
 };

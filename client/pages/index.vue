@@ -109,7 +109,7 @@
           <b-button
             class="bottom-absolute-left mb-5"
             variant="success"
-            @click="addSingleVotes"
+            @click="addVotes"
           >
             Neues Ranking speichern
           </b-button>
@@ -439,30 +439,19 @@ export default {
             votes.push(v)
           })
 
-          await this.ratedScheese.forEach(async (scheese, index) => {
-          // console.log("_points:", index)
-          // console.log("_scheese:", scheese)
-          console.log("index", index)
-          console.log("scheese.id", scheese.id)
-          console.log("points", (this.ratedScheese.length - index - 1) / divisor)
-          const p = (this.ratedScheese.length - index - 1) / divisor
-
-            await this.$apollo.mutate({
-              variables: {
-                scheeseId: scheese.id,
-                voter_hash: this.voter_hash,
-                rank: index + 1,
-                points: p,
-              },
-              mutation: gql`
-                mutation addVote($scheeseId: ID!, $voter_hash: String!, $rank: Int!, $points: Float!) {
-                  addVote(scheeseId: $scheeseId, voter_hash: $voter_hash, rank: $rank, points: $points) {
-                    id
-                  }
+          await this.$apollo.mutate({
+            variables: {
+              votes: votes
+            },
+            mutation: gql`
+              mutation addVotes($votes: [VoteInput]!) {
+                addVotes(votes: $votes) {
+                  id
                 }
-              `,
-            })
+              }
+            `,
           })
+
         } else {
             this.$toasted.show("Kein gültiger Abstimmungscode", {
               type: "error",
@@ -476,93 +465,12 @@ export default {
             })
 
             throw new Error("invalid voter code")
-        }
-
-        this.$toasted.show("Erfolgreich abgestimmt", {
-          type: "success",
-          duration: 2500,
-          action: {
-            text: "OK",
-            onClick: (e, toastObject) => {
-              toastObject.goAway(0)
-            },
-          },
-        })
+          }
 
         // console.log("this", this.scheeseList)
         this.setHasVoted(e)
       } catch(e) {
         console.log("Error adding votes:", e)
-      }
-    },
-    async addSingleVotes(e) {
-      e.preventDefault()
-      // TODO: Add delete votes here
-      // console.log("this.hash", this.hash)
-      this.error = null
-      try {
-        if(this.validateHash() != -1) {
-
-          let divisor = 1
-            if (this.ratedScheese.length > 1) {
-            divisor = this.ratedScheese.length - 1
-          }
-          console.log("divisor", divisor)
-
-          await this.ratedScheese.forEach(async (scheese, index) => {
-          // console.log("_points:", index)
-          // console.log("_scheese:", scheese)
-          console.log("index", index)
-          console.log("scheese.id", scheese.id)
-          console.log("points", (this.ratedScheese.length - index - 1) / divisor)
-          const p = (this.ratedScheese.length - index - 1) / divisor
-
-            await this.$apollo.mutate({
-              variables: {
-                scheeseId: scheese.id,
-                voter_hash: this.voter_hash,
-                rank: index + 1,
-                points: p,
-              },
-              mutation: gql`
-                mutation addVote($scheeseId: ID!, $voter_hash: String!, $rank: Int!, $points: Float!) {
-                  addVote(scheeseId: $scheeseId, voter_hash: $voter_hash, rank: $rank, points: $points) {
-                    id
-                  }
-                }
-              `,
-            })
-          })
-        } else {
-            this.$toasted.show("Kein gültiger Abstimmungscode", {
-              type: "error",
-              duration: 2500,
-              action: {
-                text: "OK",
-                onClick: (e, toastObject) => {
-                  toastObject.goAway(0)
-                },
-              },
-            })
-
-            throw new Error("invalid voter code")
-        }
-
-        this.$toasted.show("Erfolgreich abgestimmt", {
-          type: "success",
-          duration: 2500,
-          action: {
-            text: "OK",
-            onClick: (e, toastObject) => {
-              toastObject.goAway(0)
-            },
-          },
-        })
-
-        // console.log("this", this.scheeseList)
-        this.setHasVoted(e)
-      } catch (e) {
-        console.log("error", e)
       }
     },
     async setHasVoted(e) {

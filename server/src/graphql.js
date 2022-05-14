@@ -1,34 +1,39 @@
-import { ApolloServer, gql } from "apollo-server-express"
-import { merge } from "lodash"
+import { ApolloServer, gql } from "apollo-server-express";
+import { merge } from "lodash";
 
-import userDirectives from "./user/directive"
+import userDirectives from "./user/directive";
 
-import context from "./context.js"
+import context from "./context.js";
 
 import {
   typeDefs as UserTypes,
   resolvers as userResolvers,
-} from "./user/index.js"
+} from "./user/index.js";
 
 import {
   typeDefs as scheeseTypes,
   resolvers as scheeseResolvers,
-} from "./scheese/index.js"
+} from "./scheese/index.js";
 
 import {
   typeDefs as voterTypes,
   resolvers as voterResolvers,
-} from "./voter/index.js"
+} from "./voter/index.js";
 
 import {
   typeDefs as voteTypes,
   resolvers as voteResolvers,
-} from "./vote/index.js"
+} from "./vote/index.js";
 
 import {
   typeDefs as scheeseListTypes,
   resolvers as scheeseListResolvers,
-} from "./result/index.js"
+} from "./result/index.js";
+
+import {
+  typeDefs as votingStatiTypes,
+  resolvers as votingStatiResolvers,
+} from "./voting_status/index.js";
 
 const localDefs = gql`
   """
@@ -88,7 +93,7 @@ const localDefs = gql`
     # success: Boolean
     message: String!
   }
-`
+`;
 
 export const typeDefs = [
   localDefs,
@@ -97,7 +102,8 @@ export const typeDefs = [
   voterTypes,
   voteTypes,
   scheeseListTypes,
-]
+  votingStatiTypes,
+];
 
 export const resolvers = merge(
   {
@@ -109,9 +115,10 @@ export const resolvers = merge(
   voterResolvers,
   voteResolvers,
   scheeseListResolvers,
-)
+  votingStatiResolvers
+);
 
-export const schemaDirectives = merge({}, userDirectives)
+export const schemaDirectives = merge({}, userDirectives);
 
 export const server = new ApolloServer({
   context: (...args) => context(...args),
@@ -120,8 +127,8 @@ export const server = new ApolloServer({
   typeDefs,
   resolvers,
   schemaDirectives,
-  formatError: e => {
-    console.error(e)
-    return e
+  formatError: (e) => {
+    console.error(e);
+    return e;
   },
-})
+});

@@ -37,6 +37,16 @@ const voterList = async (root, args, ctx) => {
   return data;
 };
 
+const votersVotedList = async (root, args, ctx) => {
+  const data = await db("voters")
+    .select("*")
+    .where({ has_voted: true })
+    .then((rows) => {
+      return rows;
+    });
+  return data;
+};
+
 const getVotersVotings = async (root, args, ctx) => {
   const data = await db("votings")
     .select("*")
@@ -93,6 +103,7 @@ export const resolvers = {
   Query: {
     voters,
     voterList,
+    votersVotedList,
   },
 
   Mutation: {

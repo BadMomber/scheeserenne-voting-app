@@ -48,6 +48,7 @@ export default {
    ** Nuxt.js modules
    */
   modules: [
+    "@nuxtjs/toast",
     // Doc: https://bootstrap-vue.js.org
     "bootstrap-vue/nuxt",
     [

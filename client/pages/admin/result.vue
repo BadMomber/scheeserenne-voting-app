@@ -52,6 +52,9 @@ import gql from "graphql-tag"
 
 
 export default {
+  data: () => ({
+    scheesePairs: [],
+  }),
   apollo: {
     scheesePairs: {
       query: gql`
@@ -69,10 +72,6 @@ export default {
       `,
     },
   },
-
-  data: () => ({
-    scheesePairs: [],
-  }),
   methods: {
 
     async log() {

@@ -1,6 +1,5 @@
 import _ from "lodash";
 import { connectionFromArraySlice, cursorToOffset } from "graphql-relay";
-import { compare, hash } from "bcrypt";
 
 import db from "../db.js";
 
@@ -13,7 +12,7 @@ const votings = async (root, args, { currentvote }) => {
     .select("*", db.raw("count(*) OVER() as total_count"))
     .limit(limit)
     .offset(offset)
-    .then((rows) => {
+    .then(rows => {
       return rows;
     });
 
@@ -44,6 +43,30 @@ const pointsForScheese = async (root, args, ctx) => {
   // Code here...
 };
 
+const addVotes = async (root, args, ctx) => {
+  // Delete all Votes with given hash before saving new one
+  const delData = await db("votings")
+    .where("voter_hash", args.voter_hash)
+    .del();
+
+  console.log("delData", delData);
+  const data = await db
+    .insert([...args.votes])
+    .returning("id")
+    .into("votings")
+    .then(async id => {
+      const createdVotes = await db("votings")
+        .select("*")
+        .where({ id: id.toString() })
+        .first();
+
+      console.log("createdVote", createdVotes);
+      return createdVotes;
+    });
+
+  return data;
+};
+
 const addVote = async (root, args, ctx) => {
   // Delete all Votes with given hash before saving new one
   const delData = await db("votings")
@@ -53,14 +76,15 @@ const addVote = async (root, args, ctx) => {
   const newVote = {
     voter_hash: args.voter_hash,
     scheese_id: args.scheeseId,
-    rank: args.points,
+    rank: args.rank,
+    points: args.points,
   };
 
   const data = await db
     .insert(newVote)
     .returning("id")
     .into("votings")
-    .then(async (id) => {
+    .then(async id => {
       const createdVote = await db("votings")
         .select("*")
         .where({ id: id.toString() })
@@ -91,5 +115,6 @@ export const resolvers = {
 
   Mutation: {
     addVote,
+    addVotes,
   },
 };

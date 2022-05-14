@@ -23,6 +23,7 @@ export const typeDefs = gql`
 
   extend type Query {
     voters(first: Int, after: String): VoterConnection
+    votersVotedList: [Voter]
     voterList: [Voter]
   }
 

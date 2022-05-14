@@ -5,9 +5,17 @@ export const typeDefs = gql`
     id: ID!
     voterId: ID
     scheeseId: ID
-    points: Int!
+    rank: Int!
+    points: Float!
     createdAt: String
     updatedtAt: String
+  }
+
+  input VoteInput {
+    voterId: ID
+    scheeseId: ID
+    rank: Int!
+    points: Float!
   }
 
   type VoteConnection implements Connection {
@@ -29,6 +37,12 @@ export const typeDefs = gql`
   }
 
   extend type Mutation {
-    addVote(scheeseId: ID, voter_hash: String!, points: Int!): Vote
+    addVote(
+      scheeseId: ID
+      voter_hash: String!
+      rank: Int!
+      points: Float!
+    ): Vote
+    addVotes(votes: [VoteInput]!): [Vote]
   }
 `;

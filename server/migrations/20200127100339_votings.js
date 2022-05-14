@@ -8,6 +8,7 @@ exports.up = (knex) =>
       .references("id")
       .inTable("scheese");
     t.integer("rank");
+    t.float("points");
     // t.enum("voting_category", ["one", "two", "three"]).notNull()
     t.timestamps(true, true);
   });

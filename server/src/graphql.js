@@ -26,11 +26,6 @@ import {
 } from "./vote/index.js";
 
 import {
-  typeDefs as scheeseListTypes,
-  resolvers as scheeseListResolvers,
-} from "./result/index.js";
-
-import {
   typeDefs as votingStatiTypes,
   resolvers as votingStatiResolvers,
 } from "./voting_status/index.js";
@@ -101,7 +96,6 @@ export const typeDefs = [
   scheeseTypes,
   voterTypes,
   voteTypes,
-  scheeseListTypes,
   votingStatiTypes,
 ];
 
@@ -114,7 +108,6 @@ export const resolvers = merge(
   scheeseResolvers,
   voterResolvers,
   voteResolvers,
-  scheeseListResolvers,
   votingStatiResolvers,
 );
 

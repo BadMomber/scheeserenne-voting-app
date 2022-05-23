@@ -27,6 +27,18 @@ const votings = async (root, args, { currentvote }) => {
   };
 };
 
+const pointsForScheese = async (root, args, ctx) => {
+  const points = await db("votings").sum("points");
+
+  console.log(
+    "------ !!!!!! ------ points ------ !!!!!! ------",
+    new Date(),
+    points,
+  );
+
+  return points;
+};
+
 const voteById = async (root, args, ctx) => {
   const vote = await db("vote")
     .where({ id: args.id })
@@ -39,8 +51,28 @@ const votingsForScheese = async (root, args, ctx) => {
   // Code here...
 };
 
-const pointsForScheese = async (root, args, ctx) => {
-  // Code here...
+function comparePoints(a, b) {
+  if (a.points_total > b.points_total) {
+    return -1;
+  }
+  if (a.points_total < b.points_total) {
+    return 1;
+  }
+  return 0;
+}
+
+const allVotes = async (root, args, ctx) => {
+  const votes = await db.raw(
+    "SELECT DISTINCT scheese_id, points_total from (SELECT scheese_id, points, SUM(points) over (partition by scheese_id) as points_total FROM votings order by scheese_id) AS x;",
+  );
+  console.log("votes:", votes.rows.sort(comparePoints));
+
+  return votes.rows
+    .map(v => ({
+      scheeseId: v.scheese_id,
+      points: v.points_total,
+    }))
+    .sort(comparePoints);
 };
 
 const addVotes = async (root, args, ctx) => {
@@ -83,6 +115,7 @@ export const resolvers = {
     voteById,
     votingsForScheese,
     pointsForScheese,
+    allVotes,
   },
 
   Mutation: {

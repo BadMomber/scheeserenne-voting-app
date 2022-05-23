@@ -18,7 +18,7 @@
           >
           <b-form-input id="new-scheese-name" v-model="voter_hash" />
 
-          <b-button @click="addHash" class="mt-5" type="reset" variant="success"
+          <b-button @click="addHash" class="mt-5" type="button" variant="success"
             >Code speichern</b-button
           >
         </b-form>
@@ -363,16 +363,6 @@ export default {
       }))
     }
   },
-  // watch: {
-  //   voterByHash: {
-  //     deep: true,
-  //     handler(voterByHash) {
-  //       // console.log("update user", Object.keys(user), Object.values(user))
-  //       // console.log("user:", user)
-  //       this.$emit("input", voterByHash)
-  //     },
-  //   },
-  // },
   variables() {
     return {
       id: this.id,

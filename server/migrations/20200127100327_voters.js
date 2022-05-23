@@ -1,5 +1,5 @@
-exports.up = (knex) =>
-  knex.schema.createTable("voters", (t) => {
+exports.up = knex =>
+  knex.schema.createTable("voters", t => {
     t.increments("id");
     t.string("voter_hash").unique();
     t.boolean("has_voted")
@@ -8,4 +8,4 @@ exports.up = (knex) =>
     t.timestamps(true, true);
   });
 
-exports.down = (knex) => knex.schema.dropTableIfExists("voters");
+exports.down = knex => knex.schema.dropTableIfExists("voters");

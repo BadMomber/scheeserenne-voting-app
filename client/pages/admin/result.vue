@@ -2,45 +2,40 @@
   <div>
     <b-container id="main-content">
       <b-row class="justify-content-center">
-        <b-col cols="11">
-          <div class="display-flex">
-            <h4 class="heading-bg">
-              ScheesePairs
-            </h4>
-            <h4 id="help" class="shadow">?</h4>
-          </div>
+        <b-col v-if="allVotes" cols="12 mt-5">
+          <h2>Result</h2>
+          <div
+              v-for="(v) in allVotes"
+              :key="v.scheeseId"
+              class="list-group-item shadow display-flex rated"
+              :v-bind="v.scheeseId"
+            >
+              <span>
+                <span class="rem2">{{ v.scheeseId }}</span
+                ><br />
+                <span class="rem2">{{ v.points }}</span
+                ><br />
+              </span>
+            </div>
+        </b-col>
+        <b-col v-else cols="12 mt-2">
+          <h2>Please provide admin pw to get the current results</h2>
         </b-col>
         <b-col cols="12 mt-2">
-          <div v-if="scheesePairs === 0" class="p-2">
-            <h5 class="center">Loading...</h5>
-            <b-button
-            class="bottom-absolute-left"
-            variant="success"
-            @click="log"
+          <b-form>
+          <label class="mt-5" for="admin-password"
+            >Passwort</label
           >
-            Neues Ranking speichern
-          </b-button>
+          <b-form-input id="admin_password" v-model="admin_password" />
 
-          </div>
-          <div v-else>
-            <h5 class="center red">
-              ScheesePairs
-            </h5>
-            <b-button
-            class="bottom-absolute-left"
-            variant="success"
-            @click="log"
+          <b-button @click="getPoints" class="mt-5" type="button" variant="success"
+            >Punkte anzeigen</b-button
           >
-            </b-button>
-            <div
-              v-for="(item) in scheesePairs"
-              :key="item.id"
-              class="list-group-item shadow display-flex rated"
-              :v-bind="item.id"
-            >
-            <span>{{item}}</span>
-            </div>
-          </div>
+
+           <b-button @click="calcResult" class="mt-5" type="button" variant="success"
+            >Ergebnis berechnen</b-button
+          >
+        </b-form>
         </b-col>
       </b-row>
     </b-container>
@@ -53,34 +48,37 @@ import gql from "graphql-tag"
 
 export default {
   data: () => ({
-    scheesePairs: [],
+    allVotes: [],
+    admin_password: undefined,
   }),
   apollo: {
-    scheesePairs: {
+    allVotes: {
       query: gql`
-        query scheesePairs {
-          scheesePairs {
-            id
-            scheeseOne
-            scheeseTwo
-            weight
-            distance
-            createdAt
-            updatedAt
+        query allVotes {
+          allVotes {
+            scheeseId
+            points
           }
         }
       `,
     },
   },
   methods: {
+    onlyUnique(value, index, self) {
+      return self.indexOf(value) === index;
+    },
+    async getPoints() {
+      console.log("getPoints:", this.admin_password)
+      this.$apollo.queries.allVotes.refetch()
+    },
 
-    async log() {
-      this.error = null
-      try {
-        console.log("scheesePairs", this.scheesePairs)
-      } catch (e) {
-        console.log("error", e)
-      }
+    async calcResult() {
+      const scheeseIds = this.allVotes.map(v => {
+        return v.scheeseId
+      })
+      const uniqueIds = [...new Set(scheeseIds)]
+      console.log("scheeseIds", scheeseIds)
+      console.log("uniqueIds", uniqueIds)
     },
   },
 }

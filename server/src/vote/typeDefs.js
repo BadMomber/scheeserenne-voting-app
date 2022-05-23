@@ -30,10 +30,11 @@ export const typeDefs = gql`
   }
 
   extend type Query {
-    votings(first: Int, after: String): VoteConnection @role(requires: ADMIN)
-    voteById(id: ID!): Vote @role(requires: ADMIN)
-    votingsForScheese(scheese_id: ID!): [Vote] @role(requires: ADMIN)
-    pointsForScheese(scheese_id: ID!): Int @role(requires: ADMIN)
+    votings(first: Int, after: String): VoteConnection
+    voteById(id: ID!): Vote
+    votingsForScheese(scheese_id: ID!): [Vote]
+    pointsForScheese: Int
+    allVotes: [Vote]
   }
 
   extend type Mutation {

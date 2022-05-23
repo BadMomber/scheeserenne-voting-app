@@ -38,29 +38,6 @@ export default {
   }),
   computed: {},
   apollo: {
-    // scheesePairs: {
-    //   query: gql`
-    //     query scheesePairs {
-    //       scheesePairs {
-    //         pageInfo {
-    //           hasNextPage
-    //           hasPreviousPage
-    //         }
-    //         totalCount
-    //         edges {
-    //           cursor
-    //           node {
-    //             id
-    //             scheeseA
-    //             scheeseB
-    //             weight
-    //             distance
-    //           }
-    //         }
-    //       }
-    //     }
-    //   `,
-    // },
     votersVotedList: {
       query: gql`
         query votersVotedList {

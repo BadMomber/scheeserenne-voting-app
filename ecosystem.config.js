@@ -3,7 +3,7 @@ module.exports = {
     {
       name: "api",
       script: "./src/index.js",
-      cwd: "/home/kersten/production/current/server",
+      cwd: "/home/kk/dev/scheeserenne-voting-app/server",
       // Options reference: https://pm2.keymetrics.io/docs/usage/application-declaration/
       instances: 1,
       autorestart: true,
@@ -23,7 +23,7 @@ module.exports = {
     {
       name: "frontend",
       script: "./node_modules/.bin/nuxt",
-      cwd: "/home/kersten/production/current/client",
+      cwd: "/home/kk/dev/scheeserenne-voting-app/client",
       args: "start",
       // Options reference: https://pm2.keymetrics.io/docs/usage/application-declaration/
       instances: 1,

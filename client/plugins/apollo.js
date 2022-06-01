@@ -7,7 +7,7 @@ import { ApolloClient } from "apollo-client";
 // import { createHttpLink } from "apollo-link-http"
 import { InMemoryCache } from "apollo-cache-inmemory";
 // import { onError } from "apollo-link-error"
-const { createUploadLink } = require("apollo-upload-client");
+const { createUploadLink, createHttpLink } = require("apollo-upload-client");
 
 // HTTP connection to the API
 const httpLink = createHttpLink({

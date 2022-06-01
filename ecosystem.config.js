@@ -12,14 +12,14 @@ module.exports = {
       env: {
         NODE_ENV: "development",
         REDIS_URL: "redis://localhost:6379/",
-        DATABASE_URL: "postgres://kk@localhost:5432/sva",
+        DATABASE_URL: "postgres://kk:kk86227KR@localhost:5432/sva",
         HOST: "127.0.0.1",
         PORT: 4000,
       },
       env_production: {
         NODE_ENV: "production",
         REDIS_URL: "redis://localhost:6379/",
-        DATABASE_URL: "postgres://kk@localhost:5432/sva",
+        DATABASE_URL: "postgres://kk:kk86227KR@localhost:5432/sva",
         HOST: "127.0.0.1",
         PORT: 4000,
       },
@@ -58,7 +58,7 @@ module.exports = {
         "npm --prefix server install && npm --prefix client install && npm --prefix server run migrate && npm --prefix client run build && pm2 reload ecosystem.config.js --env production",
       env: {
         NODE_ENV: "production",
-        DATABASE_URL: "postgres://kk@localhost:5432/sva",
+        DATABASE_URL: "postgres://kk:kk86227KR@localhost:5432/sva",
       },
     },
   },

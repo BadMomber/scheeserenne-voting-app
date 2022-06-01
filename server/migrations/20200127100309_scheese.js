@@ -6,7 +6,7 @@ exports.up = (knex) =>
       .notNull();
     t.string("image");
     t.boolean("finished")
-      .defaultTo(false)
+      .defaultTo(true)
       .notNull();
     t.float("value").defaultTo(0);
     t.timestamps(true, true);

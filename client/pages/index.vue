@@ -11,29 +11,44 @@
           </div>
         </b-col> -->
 
-        <b-col cols="12 mt-5">
+        <b-col cols="12">
         <b-form>
           <label class="mt-5" for="new-scheese-name"
-            >Code: {{voter_hash}} </label
+            >Bitte hier Ihren Abstimmungscode eingeben {{voter_hash}} </label
           >
-          <b-form-input id="new-scheese-name" v-model="voter_hash" />
-
-          <b-button @click="addHash" class="mt-5" type="button" variant="success"
-            >Code speichern</b-button
-          >
+          <b-form-input placeholder="Code..." id="new-scheese-name" v-model="voter_hash" />
         </b-form>
       </b-col>
 
-        <b-col cols="12 mt-2">
+        <b-col cols="10 mt-2">
           <!-- https://sortablejs.github.io/Vue.Draggable/#/transition-example-2 -->
           <div v-if="ratedScheese.length === 0" class="p-2">
-            <h5 class="center red">
-              Sie haben noch keinen Spieler bewertet
-            </h5>
-            <p class="warning">
+            <h6 class="center red">
+              Sie haben noch keine Scheese bewertet. Ziehen sie die Scheese zum bewerten hier hin.
+
+              <!-- <div class="popup" @click="togglePopup">
+                <b-button>Hilfe</b-button>
+                <span class="popuptext" id="myPopup">
+                  In der unteren Liste sehen Sie alle Scheese,
+                  die ihren Lauf beendet haben.
+                  <br>
+                  <br>
+                  Um eine Scheese zu bewerten,
+                  ziehen Sie die Scheese aus der unteren Liste in die
+                  obere Liste.
+                  <br>
+                  <br>
+                  Ordnen Sie die Scheese entsprechend
+                  Ihrer Wertung (Oben = meiste Punkte, unten = wenigste
+                  Punkte).
+                  <b-button id="close">X</b-button>
+                </span>
+              </div> -->
+            </h6>
+            <!-- <p class="warning">
               Um eine Scheese zu bewerten, ziehen Sie die Scheese bitte in
               dieses Feld.
-            </p>
+            </p> -->
             <h5 class="center">&#8595;</h5>
           </div>
           <div v-else>
@@ -72,13 +87,10 @@
           </draggable>
           <b-col v-if="scheeseList.length !== 0" cols="12">
             <h5 class="mt-5">Noch nicht gewertete Scheese</h5>
-            <p>
-              Hier sehen Sie alle Scheese, die den Lauf beendet haben
-            </p>
             <h5 class="center">&#8595;</h5>
           </b-col>
           <b-col v-else cols="12">
-            <h5 class="done mt-5">Sie haben alle Scheese bewertet</h5>
+            <h5 class="done mt-5">Es gibt keine Scheese zu bewerten.</h5>
           </b-col>
           <draggable
             class="list-group not-rated-list"
@@ -105,13 +117,13 @@
             </li>
           </draggable>
         </b-col>
-        <b-col cols="12 mt-5">
+        <b-col cols="10 mt-5">
           <b-button
             class="bottom-absolute-left mb-5"
             variant="success"
             @click="addVotes"
           >
-            Neues Ranking speichern
+            Ranking speichern
           </b-button>
         </b-col>
       </b-row>
@@ -120,6 +132,73 @@
 </template>
 
 <style lang="scss">
+/********** POP UP **********/
+
+/* Popup container - can be anything you want */
+.popup {
+  display: inline-block;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* The actual popup */
+.popup .popuptext {
+  visibility: hidden;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 80px;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class - hide and show the popup */
+.popup .show {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity:1 ;}
+}
+
+#close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+/********* POP UP ENDE  *********/
+
+
 #main-content {
   width: 100%;
   height: auto;
@@ -211,7 +290,8 @@
   font-size: 1.4rem;
 }
 
-.col-12 {
+.col-12,
+.col-10 {
   padding-right: 0;
   padding-left: 0;
   text-align: center;
@@ -369,6 +449,10 @@ export default {
     }
   },
   methods: {
+    togglePopup() {
+      var popup = document.getElementById("myPopup");
+      popup.classList.toggle("show");
+    },
     log(evt) {
       window.console.log(evt)
       // console.log("ratedScheese length: ", this.ratedScheese.length)
@@ -441,6 +525,17 @@ export default {
               }
             `,
           })
+
+          this.$toasted.show("Erfolgreich abgestimmt", {
+              type: "success",
+              duration: 2500,
+              action: {
+                text: "OK",
+                onClick: (e, toastObject) => {
+                  toastObject.goAway(0)
+                },
+              },
+            })
 
         } else {
             this.$toasted.show("Kein gültiger Abstimmungscode", {

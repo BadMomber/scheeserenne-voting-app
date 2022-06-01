@@ -31,6 +31,7 @@ const scheese = async (root, args, { currentUser }) => {
 const scheeseList = async (root, args, ctx) => {
   const data = await db("scheese")
     .select("*")
+    .where({ finished: true })
     .then((rows) => {
       return rows;
     });

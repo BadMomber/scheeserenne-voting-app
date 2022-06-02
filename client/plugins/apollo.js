@@ -10,36 +10,36 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 const { createUploadLink, createHttpLink } = require("apollo-upload-client");
 
 // HTTP connection to the API
-const httpLink = createHttpLink({
-  // You should use an absolute URL here
-  uri: "http://localhost:4000/graphql",
-  credentials: "include"
-});
+// const httpLink = createHttpLink({
+//   // You should use an absolute URL here
+//   uri: "http://localhost:4000/graphql",
+//   credentials: "include"
+// });
 
-const errorLink = onError(({ graphQLErrors, networkError }) => {
-  if (graphQLErrors)
-    graphQLErrors.forEach(({ message, locations, path }) =>
-      console.error(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-      )
-    );
-  if (networkError) console.error(`[Network error]: ${networkError}`);
-});
+// const errorLink = onError(({ graphQLErrors, networkError }) => {
+//   if (graphQLErrors)
+//     graphQLErrors.forEach(({ message, locations, path }) =>
+//       console.error(
+//         `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+//       )
+//     );
+//   if (networkError) console.error(`[Network error]: ${networkError}`);
+// });
 
-// Cache implementation
-const cache = new InMemoryCache();
+// // Cache implementation
+// const cache = new InMemoryCache();
 
-const uri =
-  process.env.NODE_ENV === "production"
-    ? "/graphql"
-    : "http://localhost:4000/graphql";
+// const uri =
+//   process.env.NODE_ENV === "production"
+//     ? "/graphql"
+//     : "http://localhost:4000/graphql";
 
-const uploadLink = createUploadLink({
-  uri,
-  headers: {
-    "keep-alive": "true"
-  }
-});
+// const uploadLink = createUploadLink({
+//   uri,
+//   headers: {
+//     "keep-alive": "true"
+//   }
+// });
 
 // Create the apollo client
 const apolloClient = new ApolloClient({

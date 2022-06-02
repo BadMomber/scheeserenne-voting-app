@@ -50,7 +50,7 @@ module.exports = {
   deploy: {
     production: {
       user: "kk",
-      host: "192.168.178.65",
+      host: "172.16.4.253",
       ref: "origin/master",
       repo: "git@github.com:BadMomber/scheeserenne-voting-app.git",
       path: "/home/kk/production",

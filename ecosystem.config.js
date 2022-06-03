@@ -3,7 +3,7 @@ module.exports = {
     {
       name: "api",
       script: "./src/index.js",
-      cwd: "/home/kk/production/current/server",
+      cwd: "/home/kk/production/source/server",
       // Options reference: https://pm2.keymetrics.io/docs/usage/application-declaration/
       instances: 1,
       autorestart: true,
@@ -27,7 +27,7 @@ module.exports = {
     {
       name: "frontend",
       script: "./node_modules/.bin/nuxt",
-      cwd: "/home/kk/production/current/client",
+      cwd: "/home/kk/production/source/client",
       args: "start",
       // Options reference: https://pm2.keymetrics.io/docs/usage/application-declaration/
       instances: 1,
@@ -55,7 +55,7 @@ module.exports = {
       repo: "git@github.com:BadMomber/scheeserenne-voting-app.git",
       path: "/home/kk/production",
       "post-deploy":
-        "whoami && npm --prefix server install && npm --prefix client install && whoami && npm --prefix server run migrate && npm --prefix client run build && pm2 reload ecosystem.config.js --env production && pm2 restart all",
+        "npm --prefix server install && npm --prefix client install && npm --prefix server run migrate && npm --prefix client run build && pm2 reload ecosystem.config.js --env production && pm2 restart all",
       env: {
         NODE_ENV: "production",
         DATABASE_URL: "postgres://kk:kk86227KR@localhost:5432/sva",

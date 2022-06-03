@@ -3,7 +3,7 @@
 
     <div v-if="loading">Loading...</div>
     <div v-else>
-     <h2>Good: {{ result.goodField }}</h2>
+    <h2>Good: {{ result.goodField }}</h2>
       <pre>Bad:
         <span v-for="(error, i) of error.graphQLErrors" :key="i">
           {{ error.message }}
@@ -383,6 +383,18 @@ body {
 <script>
 import gql from "graphql-tag"
 import draggable from "vuedraggable"
+import { onError } from '@apollo/client/link/error'
+
+const link = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors)
+    graphQLErrors.map(({ message, locations, path }) =>
+      console.log(
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+      ),
+    )
+
+  if (networkError) console.log(`[Network error]: ${networkError}`)
+})
 
 export default {
   setup () {

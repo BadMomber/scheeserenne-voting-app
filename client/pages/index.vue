@@ -3,7 +3,6 @@
 
     <div v-if="loading">Loading...</div>
       <div v-else>
-      <h2>Good: {{ result.goodField }}</h2>
       <pre>Bad:
         <span v-for="(error, i) of error.graphQLErrors" :key="i">
           {{ error.message }}

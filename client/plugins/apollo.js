@@ -31,6 +31,8 @@ const { createUploadLink } = require("apollo-upload-client");
 // Cache implementation
 const cache = new InMemoryCache();
 
+console.log("App running in mode:", process.env.NODE_ENV);
+
 // new
 const uri =
   process.env.NODE_ENV === "production"
@@ -39,17 +41,29 @@ const uri =
 
 // new
 // HTTP connection to the API
-const httpLink = createHttpLink({
-  // You should use an absolute URL here
-  uri,
-  credentials: "include"
-});
+// const httpLink = createHttpLink({
+//   // You should use an absolute URL here
+//   uri,
+//   credentials: "include"
+// });
 
 // Create the apollo client
-const apolloClient = new ApolloClient({
-  link: createUploadLink({ uri: "http://localhost:4000/graphql" }),
-  cache
-});
+
+let apolloClient;
+
+if (process.env.NODE_ENV === "production") {
+  apolloClient = new ApolloClient({
+    link: createUploadLink({ uri: "/graphql" }),
+    cache
+  });
+} else {
+  apolloClient = new ApolloClient({
+    link: createUploadLink({ uri: "http://localhost:4000/graphql" }),
+    cache
+  });
+}
+
+console.log("ApolloClient:", ApolloClient);
 
 Vue.use(VueApollo);
 

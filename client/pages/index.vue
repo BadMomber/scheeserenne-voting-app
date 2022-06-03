@@ -1,5 +1,16 @@
 <template>
   <div>
+
+    <div v-if="loading">Loading...</div>
+      <div v-else>
+      <h2>Good: {{ result.goodField }}</h2>
+      <pre>Bad:
+        <span v-for="(error, i) of error.graphQLErrors" :key="i">
+          {{ error.message }}
+        </span>
+      </pre>
+    </div>
+
     <b-container id="main-content">
       <b-row class="justify-content-center">
         <!-- <b-col cols="11">

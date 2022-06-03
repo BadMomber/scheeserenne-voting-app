@@ -2,7 +2,8 @@
   <div>
 
     <div v-if="loading">Loading...</div>
-      <div v-else>
+    <div v-else>
+     <h2>Good: {{ result.goodField }}</h2>
       <pre>Bad:
         <span v-for="(error, i) of error.graphQLErrors" :key="i">
           {{ error.message }}
@@ -384,6 +385,22 @@ import gql from "graphql-tag"
 import draggable from "vuedraggable"
 
 export default {
+  setup () {
+    const { result, loading, error } = useQuery(gql`
+      query WillFail {
+        badField
+        goodField
+      }
+    `, null, {
+      errorPolicy: 'all',
+    })
+
+    return {
+      result,
+      loading,
+      error,
+    }
+  },
   name: "TransitionExample",
   display: "Transition",
   order: 6,

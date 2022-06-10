@@ -107,9 +107,7 @@
               <img class ="platzhalter left" id="scheeseImg" :src="item.image">
               <span class="right">
                 <span class="rem2">{{ item.name }}</span
-                ><br />
-                <span class="rem2">{{ item.id }}</span
-                ><br />
+                >
                 <span class="rem2 align-left rank">Rang: {{ index + 1 }}</span>
               </span>
             </li>

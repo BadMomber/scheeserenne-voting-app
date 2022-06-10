@@ -55,7 +55,7 @@ module.exports = {
       repo: "git@github.com:BadMomber/scheeserenne-voting-app.git",
       path: "/home/root/production",
       "post-deploy":
-        "whoami && which npm && npm --prefix server install && npm --prefix client install && npm --prefix server run migrate && npm --prefix client run build",
+        "whoami && which npm && npm --prefix server install && npm --prefix client install && npm --prefix server run migrate && npm --prefix client run build && pm2 reload ecosystem.config.js --env production",
       env: {
         NODE_ENV: "production",
         DATABASE_URL: "postgres://root:kk86227KR@localhost:5432/sva",

@@ -12,7 +12,7 @@ const votings = async (root, args, { currentvote }) => {
     .select("*", db.raw("count(*) OVER() as total_count"))
     .limit(limit)
     .offset(offset)
-    .then(rows => {
+    .then((rows) => {
       return rows;
     });
 
@@ -33,7 +33,7 @@ const pointsForScheese = async (root, args, ctx) => {
   console.log(
     "------ !!!!!! ------ points ------ !!!!!! ------",
     new Date(),
-    points,
+    points
   );
 
   return points;
@@ -62,13 +62,18 @@ function comparePoints(a, b) {
 }
 
 const allVotes = async (root, args, ctx) => {
+  // Divide SUM by COUNT
   const votes = await db.raw(
-    "SELECT DISTINCT scheese_id, points_total from (SELECT scheese_id, points, SUM(points) over (partition by scheese_id) as points_total FROM votings order by scheese_id) AS x;",
+    "SELECT DISTINCT scheese_id, points_total from (SELECT scheese_id, points, SUM(points) over (partition by scheese_id) as points_total FROM votings order by scheese_id) AS x;"
   );
+
+  console.log("votes");
+
+  // TODO: Get sum of votes for one scheese. Divide points for scheese by sum of votes for scheese.
   console.log("votes:", votes.rows.sort(comparePoints));
 
   return votes.rows
-    .map(v => ({
+    .map((v) => ({
       scheeseId: v.scheese_id,
       points: v.points_total,
     }))
@@ -88,7 +93,7 @@ const addVotes = async (root, args, ctx) => {
     .insert([...args.votes])
     .returning("voter_hash")
     .into("votings")
-    .then(async voterHash => {
+    .then(async (voterHash) => {
       const createdVotes = await db("votings")
         .select("*")
         .where({ voter_hash: voterHash.toString() })

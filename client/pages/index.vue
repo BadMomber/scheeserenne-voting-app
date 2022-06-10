@@ -2,14 +2,14 @@
   <div>
     <b-container id="main-content">
       <b-row class="justify-content-center">
-        <!-- <b-col cols="11">
+        <b-col cols="12">
           <div class="display-flex">
             <h4 class="heading-bg">
               Man of the Match
             </h4>
             <h4 id="help" class="shadow">?</h4>
           </div>
-        </b-col> -->
+        </b-col>
 
         <b-col cols="12">
         <b-form>
@@ -24,7 +24,7 @@
           <!-- https://sortablejs.github.io/Vue.Draggable/#/transition-example-2 -->
           <div v-if="ratedScheese.length === 0" class="p-2">
             <h6 class="center red">
-              Sie haben noch keine Scheese bewertet. Ziehen sie die Scheese zum bewerten hier hin.
+              Sie haben noch keinen Spieler bewertet. Ziehen sie die Spieler zum bewerten hier hin.
 
               <!-- <div class="popup" @click="togglePopup">
                 <b-button>Hilfe</b-button>

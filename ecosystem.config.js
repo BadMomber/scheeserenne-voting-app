@@ -3,7 +3,7 @@ module.exports = {
     {
       name: "api",
       script: "./src/index.js",
-      cwd: "/home/kk/production/source/server",
+      cwd: "/home/root/production/source/server",
       // Options reference: https://pm2.keymetrics.io/docs/usage/application-declaration/
       instances: 1,
       autorestart: true,
@@ -12,14 +12,14 @@ module.exports = {
       env: {
         NODE_ENV: "development",
         REDIS_URL: "redis://localhost:6379/",
-        DATABASE_URL: "postgres://kk:kk86227KR@localhost:5432/sva",
+        DATABASE_URL: "postgres://root:kk86227KR@localhost:5432/sva",
         HOST: "127.0.0.1",
         PORT: 4000,
       },
       env_production: {
         NODE_ENV: "production",
         REDIS_URL: "redis://localhost:6379/",
-        DATABASE_URL: "postgres://kk:kk86227KR@localhost:5432/sva",
+        DATABASE_URL: "postgres://root:kk86227KR@localhost:5432/sva",
         HOST: "127.0.0.1",
         PORT: 4000,
       },
@@ -27,7 +27,7 @@ module.exports = {
     {
       name: "frontend",
       script: "./node_modules/.bin/nuxt",
-      cwd: "/home/kk/production/source/client",
+      cwd: "/home/root/production/source/client",
       args: "start",
       // Options reference: https://pm2.keymetrics.io/docs/usage/application-declaration/
       instances: 1,
@@ -49,16 +49,16 @@ module.exports = {
 
   deploy: {
     production: {
-      user: "kk",
-      host: "172.16.4.253",
+      user: "root",
+      host: "167.71.43.9",
       ref: "origin/master",
       repo: "git@github.com:BadMomber/scheeserenne-voting-app.git",
-      path: "/home/kk/production",
+      path: "/home/root/production",
       "post-deploy":
         "npm --prefix server install && npm --prefix client install && npm --prefix server run migrate && npm --prefix client run build && pm2 reload ecosystem.config.js --env production && pm2 restart all",
       env: {
         NODE_ENV: "production",
-        DATABASE_URL: "postgres://kk:kk86227KR@localhost:5432/sva",
+        DATABASE_URL: "postgres://root:kk86227KR@localhost:5432/sva",
       },
     },
   },

@@ -76,9 +76,7 @@
               ></span>
               <span class="right">
                 <span class="rem2">{{ item.name }}</span
-                ><br />
-                <span class="rem2">{{ item.id }}</span
-                ><br />
+                >
                 <b-badge variant="success" class="rem2 align-left rank"
                   >Rang: {{ index + 1 }}</b-badge
                 >

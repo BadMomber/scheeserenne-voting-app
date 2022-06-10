@@ -7,7 +7,7 @@
             <h4 class="heading-bg">
               Man of the Match
             </h4>
-            <h4 id="help" class="shadow">?</h4>
+            <!-- <h4 id="help" class="shadow">?</h4> -->
           </div>
         </b-col>
 
@@ -86,7 +86,7 @@
             </div>
           </draggable>
           <b-col v-if="scheeseList.length !== 0" cols="12">
-            <h5 class="mt-5">Noch nicht gewertete Scheese</h5>
+            <h5 class="mt-5">Noch nicht gewertete Spieler</h5>
             <h5 class="center">&#8595;</h5>
           </b-col>
           <b-col v-else cols="12">

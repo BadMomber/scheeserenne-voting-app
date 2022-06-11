@@ -75,7 +75,7 @@
               </span>
             </div>
           </draggable>
-          <b-col v-if="scheeseList.length !== 0" cols="12">
+          <b-col v-if="scheeseListTwo.length !== 0" cols="12">
             <h5 class="mt-5">Noch nicht gewertete Spieler</h5>
             <h5 class="center">&#8595;</h5>
           </b-col>
@@ -84,13 +84,13 @@
           </b-col>
           <draggable
             class="list-group not-rated-list"
-            :list="scheeseList"
+            :list="scheeseListTwo"
             tag="ul"
             group="scheese"
             @change="log"
           >
             <li
-              v-for="(item, index) in scheeseList"
+              v-for="(item, index) in scheeseListTwo"
               :id="'item' + index"
               :key="item.id"
               class="list-group-item shadow display-flex not-rated"
@@ -109,7 +109,7 @@
           <b-button
             class="bottom-absolute-left mb-5"
             variant="success"
-            @click="addVotes"
+            @click="addVotesVoting2"
           >
             Ranking speichern
           </b-button>
@@ -292,6 +292,10 @@ body {
 .navbar-expand .navbar-collapse {
     justify-content: space-evenly;
 }
+
+.active {
+  background-color: white;
+}
 </style>
 
 <script>
@@ -307,10 +311,10 @@ export default {
     draggable,
   },
   apollo: {
-    scheeseList: {
+    scheeseListTwo: {
       query: gql`
-        query scheeseList {
-          scheeseList {
+        query scheeseListTwo {
+          scheeseListTwo {
             id
             name
             image
@@ -343,7 +347,7 @@ export default {
     },
   },
   data: () => ({
-    scheeseList: [],
+    scheeseListTwo: [],
     ratedScheese: [],
     voter_hash: undefined,
     voterByHash: undefined,
@@ -355,7 +359,7 @@ export default {
   }),
   computed: {
     maxPoints() {
-      return this.scheeseList.length
+      return this.scheeseListTwo.length
     },
     voterHashList() {
       return this.voterList.map((e) => (
@@ -375,6 +379,12 @@ export default {
     }
   },
   methods: {
+    setActive() {
+      console.log("setActive")
+      if(this.scheeseListTwo.length !== 0) {
+        document.getElementById("voting2").classList.add('active');
+      }
+    },
     togglePopup() {
       var popup = document.getElementById("myPopup");
       popup.classList.toggle("show");
@@ -382,7 +392,7 @@ export default {
     log(evt) {
       window.console.log(evt)
       // console.log("ratedScheese length: ", this.ratedScheese.length)
-      // console.log("notRatedScheese length: ", this.scheeseList.length)
+      // console.log("notRatedScheese length: ", this.scheeseListTwo.length)
     },
     addHash() {
       this.validateHash()
@@ -403,7 +413,7 @@ export default {
       return validHash
     },
     sort() {
-      this.scheeseList = this.scheeseList.sort((a, b) => a.order - b.order)
+      this.scheeseListTwo = this.scheeseListTwo.sort((a, b) => a.order - b.order)
     },
     pointMapper(index) {
       // console.log("index:", index)
@@ -412,7 +422,7 @@ export default {
     calculatePoints(evt) {
       // console.log(this.ratedScheese)
     },
-    async addVotes(e) {
+    async addVotesVoting2(e) {
       e.preventDefault()
       this.error = null
 
@@ -444,8 +454,8 @@ export default {
               votes: votes
             },
             mutation: gql`
-              mutation addVotes($votes: [VoteInput]!) {
-                addVotes(votes: $votes) {
+              mutation addVotesVoting2($votes: [VoteInput]!) {
+                addVotesVoting2(votes: $votes) {
                   id
                 }
               }
@@ -478,7 +488,7 @@ export default {
             throw new Error("invalid voter code")
           }
 
-        // console.log("this", this.scheeseList)
+        // console.log("this", this.scheeseListTwo)
         this.setHasVoted(e)
       } catch(e) {
         console.log("Error adding votes:", e)
@@ -504,6 +514,9 @@ export default {
         console.log("error", e)
       }
     },
+  },
+  updated(){
+    this.setActive()
   },
 }
 </script>

@@ -75,7 +75,7 @@
               </span>
             </div>
           </draggable>
-          <b-col v-if="scheeseList.length !== 0" cols="12">
+          <b-col v-if="scheeseListOne.length !== 0" cols="12">
             <h5 class="mt-5">Noch nicht gewertete Spieler</h5>
             <h5 class="center">&#8595;</h5>
           </b-col>
@@ -84,13 +84,13 @@
           </b-col>
           <draggable
             class="list-group not-rated-list"
-            :list="scheeseList"
+            :list="scheeseListOne"
             tag="ul"
             group="scheese"
             @change="log"
           >
             <li
-              v-for="(item, index) in scheeseList"
+              v-for="(item, index) in scheeseListOne"
               :id="'item' + index"
               :key="item.id"
               class="list-group-item shadow display-flex not-rated"
@@ -292,6 +292,10 @@ body {
 .navbar-expand .navbar-collapse {
     justify-content: space-evenly;
 }
+
+.active {
+  background-color: white;
+}
 </style>
 
 <script>
@@ -307,10 +311,10 @@ export default {
     draggable,
   },
   apollo: {
-    scheeseList: {
+    scheeseListOne: {
       query: gql`
-        query scheeseList {
-          scheeseList {
+        query scheeseListOne {
+          scheeseListOne {
             id
             name
             image
@@ -343,7 +347,7 @@ export default {
     },
   },
   data: () => ({
-    scheeseList: [],
+    scheeseListOne: [],
     ratedScheese: [],
     voter_hash: undefined,
     voterByHash: undefined,
@@ -355,7 +359,7 @@ export default {
   }),
   computed: {
     maxPoints() {
-      return this.scheeseList.length
+      return this.scheeseListOne.length
     },
     voterHashList() {
       return this.voterList.map((e) => (
@@ -375,14 +379,25 @@ export default {
     }
   },
   methods: {
+    setActive() {
+      console.log("setActive")
+      console.log("this.scheeseListOne.length", this.scheeseListOne.length)
+      if(this.scheeseListOne.length !== 0) {
+        document.getElementById("index").classList.add('active');
+      }
+    },
     togglePopup() {
       var popup = document.getElementById("myPopup");
       popup.classList.toggle("show");
     },
     log(evt) {
       window.console.log(evt)
+      console.log("rataedScheese length:", this.ratedScheese)
       // console.log("ratedScheese length: ", this.ratedScheese.length)
-      // console.log("notRatedScheese length: ", this.scheeseList.length)
+      // console.log("notRatedScheese length: ", this.scheeseListOne.length)
+    },
+    logRated() {
+      console.log("rataedScheese length:", this.ratedScheese)
     },
     addHash() {
       this.validateHash()
@@ -403,7 +418,7 @@ export default {
       return validHash
     },
     sort() {
-      this.scheeseList = this.scheeseList.sort((a, b) => a.order - b.order)
+      this.scheeseListOne = this.scheeseListOne.sort((a, b) => a.order - b.order)
     },
     pointMapper(index) {
       // console.log("index:", index)
@@ -478,7 +493,7 @@ export default {
             throw new Error("invalid voter code")
           }
 
-        // console.log("this", this.scheeseList)
+        // console.log("this", this.scheeseListOne)
         this.setHasVoted(e)
       } catch(e) {
         console.log("Error adding votes:", e)
@@ -504,6 +519,9 @@ export default {
         console.log("error", e)
       }
     },
+  },
+  updated(){
+    this.setActive()
   },
 }
 </script>

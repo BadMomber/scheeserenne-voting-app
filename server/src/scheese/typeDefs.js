@@ -23,7 +23,8 @@ export const typeDefs = gql`
 
   extend type Query {
     scheese(first: Int, after: String): ScheeseConnection @role(requires: ADMIN)
-    scheeseList: [Scheese]
+    scheeseListOne: [Scheese]
+    scheeseListTwo: [Scheese]
     scheeseById(id: ID!): Scheese
     finishedScheese: [Scheese]
     notFinishedScheese: [Scheese]

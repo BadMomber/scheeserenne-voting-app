@@ -28,10 +28,24 @@ const scheese = async (root, args, { currentUser }) => {
   };
 };
 
-const scheeseList = async (root, args, ctx) => {
+const scheeseListOne = async (root, args, ctx) => {
   const data = await db("scheese")
     .select("*")
     .where({ finished: true })
+    .where({ class: "season" })
+    .orWhere({ class: "match" })
+    .then((rows) => {
+      return rows;
+    });
+  calculateResult();
+  return data;
+};
+
+const scheeseListTwo = async (root, args, ctx) => {
+  const data = await db("scheese")
+    .select("*")
+    .where({ finished: true })
+    .where({ class: "match" })
     .then((rows) => {
       return rows;
     });
@@ -138,7 +152,8 @@ export const resolvers = {
 
   Query: {
     scheese,
-    scheeseList,
+    scheeseListOne,
+    scheeseListTwo,
     scheeseById,
     finishedScheese,
     notFinishedScheese,

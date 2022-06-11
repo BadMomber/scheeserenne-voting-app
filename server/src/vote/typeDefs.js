@@ -35,9 +35,13 @@ export const typeDefs = gql`
     votingsForScheese(scheese_id: ID!): [Vote]
     pointsForScheese: Int
     allVotes: [Vote]
+    allVotesVoting2: [Vote]
+    allVotesVoting3: [Vote]
   }
 
   extend type Mutation {
     addVotes(votes: [VoteInput]!): [Vote]
+    addVotesVoting2(votes: [VoteInput]!): [Vote]
+    addVotesVoting3(votes: [VoteInput]!): [Vote]
   }
 `;

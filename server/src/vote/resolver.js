@@ -80,6 +80,44 @@ const allVotes = async (root, args, ctx) => {
     .sort(comparePoints);
 };
 
+const allVotesVoting2 = async (root, args, ctx) => {
+  // Divide SUM by COUNT
+  const votes = await db.raw(
+    "SELECT DISTINCT scheese_id, points_total from (SELECT scheese_id, points, SUM(points) over (partition by scheese_id) as points_total FROM votings_2 order by scheese_id) AS x;"
+  );
+
+  console.log("votes");
+
+  // TODO: Get sum of votes for one scheese. Divide points for scheese by sum of votes for scheese.
+  console.log("votes:", votes.rows.sort(comparePoints));
+
+  return votes.rows
+    .map((v) => ({
+      scheeseId: v.scheese_id,
+      points: v.points_total,
+    }))
+    .sort(comparePoints);
+};
+
+const allVotesVoting3 = async (root, args, ctx) => {
+  // Divide SUM by COUNT
+  const votes = await db.raw(
+    "SELECT DISTINCT scheese_id, points_total from (SELECT scheese_id, points, SUM(points) over (partition by scheese_id) as points_total FROM votings_3 order by scheese_id) AS x;"
+  );
+
+  console.log("votes");
+
+  // TODO: Get sum of votes for one scheese. Divide points for scheese by sum of votes for scheese.
+  console.log("votes:", votes.rows.sort(comparePoints));
+
+  return votes.rows
+    .map((v) => ({
+      scheeseId: v.scheese_id,
+      points: v.points_total,
+    }))
+    .sort(comparePoints);
+};
+
 const addVotes = async (root, args, ctx) => {
   // Delete all Votes with given hash before saving new one
   console.log("args", args);
@@ -107,6 +145,60 @@ const addVotes = async (root, args, ctx) => {
   return data;
 };
 
+const addVotesVoting2 = async (root, args, ctx) => {
+  // Delete all Votes with given hash before saving new one
+  console.log("args", args);
+  const delData = await db("votings_2")
+    .where("voter_hash", args.votes[0].voter_hash)
+    .del();
+
+  console.log("delData", delData);
+  console.log("args.votes", args.votes);
+  const data = await db
+    .insert([...args.votes])
+    .returning("voter_hash")
+    .into("votings_2")
+    .then(async (voterHash) => {
+      const createdVotes = await db("votings_2")
+        .select("*")
+        .where({ voter_hash: voterHash.toString() })
+        .first();
+
+      console.log("createdVote", createdVotes);
+      return createdVotes;
+    });
+
+  console.log("addVotes data", data);
+  return data;
+};
+
+const addVotesVoting3 = async (root, args, ctx) => {
+  // Delete all Votes with given hash before saving new one
+  console.log("args", args);
+  const delData = await db("votings_3")
+    .where("voter_hash", args.votes[0].voter_hash)
+    .del();
+
+  console.log("delData", delData);
+  console.log("args.votes", args.votes);
+  const data = await db
+    .insert([...args.votes])
+    .returning("voter_hash")
+    .into("votings_3")
+    .then(async (voterHash) => {
+      const createdVotes = await db("votings_3")
+        .select("*")
+        .where({ voter_hash: voterHash.toString() })
+        .first();
+
+      console.log("createdVote", createdVotes);
+      return createdVotes;
+    });
+
+  console.log("addVotes data", data);
+  return data;
+};
+
 export const resolvers = {
   Vote: {
     // List employees attributes here...
@@ -121,9 +213,13 @@ export const resolvers = {
     votingsForScheese,
     pointsForScheese,
     allVotes,
+    allVotesVoting2,
+    allVotesVoting3,
   },
 
   Mutation: {
     addVotes,
+    addVotesVoting2,
+    addVotesVoting3,
   },
 };

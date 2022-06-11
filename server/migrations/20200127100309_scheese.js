@@ -1,7 +1,7 @@
 exports.up = (knex) =>
   knex.schema.createTable("scheese", (t) => {
     t.increments("id");
-    t.enum("class", ["match", "season"]).defaultTo("season");
+    t.enum("class", ["kat1", "kat2", "kat3"]).defaultTo("season");
     t.string("name")
       .unique()
       .notNull();

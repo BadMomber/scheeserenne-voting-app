@@ -4,15 +4,15 @@
       <b-row class="justify-content-center">
 
         <b-col cols="12">
-        <b-form>
-          <label class="mt-1" for="new-scheese-name"
-            >Bitte hier Ihren Abstimmungscode eingeben {{voter_hash}} </label
-          >
-          <b-form-input placeholder="Code..." id="new-scheese-name" v-model="voter_hash" />
-        </b-form>
-      </b-col>
+          <b-form>
+            <label class="mt-1" for="new-scheese-name"
+              >Bitte hier Ihren Abstimmungscode eingeben {{voter_hash}} </label
+            >
+            <b-form-input placeholder="Code..." id="new-scheese-name" v-model="voter_hash" />
+          </b-form>
+        </b-col>
 
-        <b-col cols="12 mt-2">
+        <b-col cols="10 mt-2">
           <!-- https://sortablejs.github.io/Vue.Draggable/#/transition-example-2 -->
           <div v-if="ratedScheese.length === 0" class="p-2">
             <h6 class="center red">

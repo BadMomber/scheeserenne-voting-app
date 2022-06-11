@@ -6,7 +6,7 @@
         <b-col cols="12">
           <b-form>
             <label class="mt-1" for="new-scheese-name"
-              >Bitte hier Ihren Abstimmungscode eingeben {{voter_hash}} </label
+              >Abstimmungscode hier eingeben {{voter_hash}} </label
             >
             <b-form-input placeholder="Code..." id="new-scheese-name" v-model="voter_hash" />
           </b-form>
@@ -16,7 +16,7 @@
           <!-- https://sortablejs.github.io/Vue.Draggable/#/transition-example-2 -->
           <div v-if="ratedScheese.length === 0" class="p-2">
             <h6 class="center red">
-              Sie haben noch keinen Spieler bewertet. Ziehen sie die Spieler zum bewerten hier hin.
+              Ziehen sie die Spieler zum bewerten hier hin.
 
               <!-- <div class="popup" @click="togglePopup">
                 <b-button>Hilfe</b-button>
@@ -80,7 +80,7 @@
             <h5 class="center">&#8595;</h5>
           </b-col>
           <b-col v-else cols="12">
-            <h5 class="done mt-5">Es gibt keine Scheese zu bewerten.</h5>
+            <h5 class="done mt-5">Es gibt keine Spieler zu bewerten.</h5>
           </b-col>
           <draggable
             class="list-group not-rated-list"

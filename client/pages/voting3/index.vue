@@ -75,7 +75,7 @@
               </span>
             </div>
           </draggable>
-          <b-col v-if="scheeseListOne.length !== 0" cols="12">
+          <b-col v-if="scheeseListThree.length !== 0" cols="12">
             <h5 class="mt-5">Noch nicht gewertete Spieler</h5>
             <h5 class="center">&#8595;</h5>
           </b-col>
@@ -84,13 +84,13 @@
           </b-col>
           <draggable
             class="list-group not-rated-list"
-            :list="scheeseListOne"
+            :list="scheeseListThree"
             tag="ul"
             group="scheese"
             @change="log"
           >
             <li
-              v-for="(item, index) in scheeseListOne"
+              v-for="(item, index) in scheeseListThree"
               :id="'item' + index"
               :key="item.id"
               class="list-group-item shadow display-flex not-rated"
@@ -109,7 +109,7 @@
           <b-button
             class="bottom-absolute-left mb-5"
             variant="success"
-            @click="addVotes"
+            @click="addVotesVoting2"
           >
             Ranking speichern
           </b-button>
@@ -311,10 +311,10 @@ export default {
     draggable,
   },
   apollo: {
-    scheeseListOne: {
+    scheeseListThree: {
       query: gql`
-        query scheeseListOne {
-          scheeseListOne {
+        query scheeseListThree {
+          scheeseListThree {
             id
             name
             image
@@ -347,7 +347,7 @@ export default {
     },
   },
   data: () => ({
-    scheeseListOne: [],
+    scheeseListThree: [],
     ratedScheese: [],
     voter_hash: undefined,
     voterByHash: undefined,
@@ -359,7 +359,7 @@ export default {
   }),
   computed: {
     maxPoints() {
-      return this.scheeseListOne.length
+      return this.scheeseListThree.length
     },
     voterHashList() {
       return this.voterList.map((e) => (
@@ -381,9 +381,8 @@ export default {
   methods: {
     setActive() {
       console.log("setActive")
-      console.log("this.scheeseListOne.length", this.scheeseListOne.length)
-      if(this.scheeseListOne.length !== 0) {
-        document.getElementById("index").classList.add('active');
+      if(this.scheeseListThree.length !== 0) {
+        document.getElementById("voting3").classList.add('active');
       }
     },
     togglePopup() {
@@ -392,12 +391,8 @@ export default {
     },
     log(evt) {
       window.console.log(evt)
-      console.log("rataedScheese length:", this.ratedScheese)
       // console.log("ratedScheese length: ", this.ratedScheese.length)
-      // console.log("notRatedScheese length: ", this.scheeseListOne.length)
-    },
-    logRated() {
-      console.log("rataedScheese length:", this.ratedScheese)
+      // console.log("notRatedScheese length: ", this.scheeseListThree.length)
     },
     addHash() {
       this.validateHash()
@@ -418,7 +413,7 @@ export default {
       return validHash
     },
     sort() {
-      this.scheeseListOne = this.scheeseListOne.sort((a, b) => a.order - b.order)
+      this.scheeseListThree = this.scheeseListThree.sort((a, b) => a.order - b.order)
     },
     pointMapper(index) {
       // console.log("index:", index)
@@ -427,7 +422,7 @@ export default {
     calculatePoints(evt) {
       // console.log(this.ratedScheese)
     },
-    async addVotes(e) {
+    async addVotesVoting2(e) {
       e.preventDefault()
       this.error = null
 
@@ -459,8 +454,8 @@ export default {
               votes: votes
             },
             mutation: gql`
-              mutation addVotes($votes: [VoteInput]!) {
-                addVotes(votes: $votes) {
+              mutation addVotesVoting2($votes: [VoteInput]!) {
+                addVotesVoting2(votes: $votes) {
                   id
                 }
               }
@@ -493,7 +488,7 @@ export default {
             throw new Error("invalid voter code")
           }
 
-        // console.log("this", this.scheeseListOne)
+        // console.log("this", this.scheeseListThree)
         this.setHasVoted(e)
       } catch(e) {
         console.log("Error adding votes:", e)

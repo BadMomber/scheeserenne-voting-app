@@ -25,6 +25,7 @@ export const typeDefs = gql`
     scheese(first: Int, after: String): ScheeseConnection @role(requires: ADMIN)
     scheeseListOne: [Scheese]
     scheeseListTwo: [Scheese]
+    scheeseListThree: [Scheese]
     scheeseById(id: ID!): Scheese
     finishedScheese: [Scheese]
     notFinishedScheese: [Scheese]

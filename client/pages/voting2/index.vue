@@ -44,7 +44,7 @@
             <h5 class="center">&#8595;</h5>
           </div>
           <div v-else>
-            <h5 class="center">Ihr Ranking</h5>
+            <h5 class="center">Ihr Ranking (mind. 2 Spieler)</h5>
           </div>
           <draggable
             class="list-group rated-list"

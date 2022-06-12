@@ -47,8 +47,22 @@ const voteById = async (root, args, ctx) => {
   return vote;
 };
 
-const votingsForScheese = async (root, args, ctx) => {
-  // Code here...
+const votingsForScheeseVotingOne = async (root, args, ctx) => {
+  const v = await db("votings").where({ scheese_id: args.scheeseId });
+
+  return v;
+};
+
+const votingsForScheeseVotingTwo = async (root, args, ctx) => {
+  const v = await db("votings_2").where({ scheese_id: args.scheeseId });
+
+  return v;
+};
+
+const votingsForScheeseVotingThree = async (root, args, ctx) => {
+  const v = await db("votings_3").where({ scheese_id: args.scheeseId });
+
+  return v;
 };
 
 function comparePoints(a, b) {
@@ -64,7 +78,7 @@ function comparePoints(a, b) {
 const allVotes = async (root, args, ctx) => {
   // Divide SUM by COUNT
   const votes = await db.raw(
-    "SELECT DISTINCT scheese_id, points_total from (SELECT scheese_id, points, SUM(points) over (partition by scheese_id) as points_total FROM votings order by scheese_id) AS x;"
+    "SELECT DISTINCT scheese_id, points_total from (SELECT scheese_id, points, SUM(points) over (partition by scheese_id) as points_total FROM votings_2 order by scheese_id) AS x;"
   );
 
   console.log("votes");
@@ -210,7 +224,9 @@ export const resolvers = {
   Query: {
     votings,
     voteById,
-    votingsForScheese,
+    votingsForScheeseVotingOne,
+    votingsForScheeseVotingTwo,
+    votingsForScheeseVotingThree,
     pointsForScheese,
     allVotes,
     allVotesVoting2,

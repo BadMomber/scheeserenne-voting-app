@@ -1,98 +1,102 @@
 <template>
   <div>
-    <b-container>
-      <b-row>
-
-        <b-col v-if="votersVotedList.length === 0" cols="12 mt-5">
-          <b-button>
-            Noch hat niemand abgestimmt
-          </b-button>
+    <b-container id="main-content">
+      <b-row class="justify-content-center">
+        <b-col v-if="allVotes" cols="12 mt-5">
+          <h2>Result</h2>
+          <div
+              v-for="(v) in allVotes"
+              :key="v.scheeseId"
+              class="list-group-item shadow display-flex rated"
+              :v-bind="v.scheeseId"
+            >
+              <span>
+                <span class="rem2">Spieler Id:{{ v.scheeseId }}</span
+                ><br />
+                <span class="rem2">Punkte: {{ v.points }}</span
+                ><br />
+              </span>
+            </div>
         </b-col>
-
-        <b-col v-else cols="12 mt-5">
-            <p>Es haben {{ votersVotedList.length }} Personen an der Abstimmung teilgenommen.</p>
+        <b-col v-else cols="12 mt-2">
+          <h2>Please provide admin pw to get the current results</h2>
         </b-col>
+        <b-col cols="12 mt-2">
+          <b-form>
+          <label class="mt-5" for="admin-password"
+            >Passwort</label
+          >
+          <b-form-input id="admin_password" v-model="admin_password" />
 
-        <b-col cols="12 mt-5">
-          <b-button>
-            Generate pairs
-          </b-button>
+          <b-button @click="getPoints" class="mt-5" type="button" variant="success"
+            >Punkte anzeigen</b-button
+          >
+
+           <b-button @click="calcResult" class="mt-5" type="button" variant="success"
+            >Ergebnis berechnen</b-button
+          >
+
+          <b-button @click="getCounts" class="mt-5" type="button" variant="success"
+            >Votings zählen</b-button
+          >
+        </b-form>
         </b-col>
-        <b-col cols="12 mt-5">
-          <b-button>
-            Calculate Results
-          </b-button>
+        <b-col>
+          <div>{{ allVotes }}</div>
         </b-col>
       </b-row>
     </b-container>
   </div>
 </template>
-<style scoped lang="scss"></style>
 
 <script>
 import gql from "graphql-tag"
 
+
 export default {
   data: () => ({
-    votersVotedList: [],
+    allVotes: [],
+    admin_password: undefined,
   }),
-  computed: {},
   apollo: {
-    votersVotedList: {
+    allVotes: {
       query: gql`
-        query votersVotedList {
-          votersVotedList {
-            id
-            voterHash
-            hasVoted
+        query allVotes {
+          allVotes {
+            scheeseId
+            points
           }
         }
       `,
     },
   },
   methods: {
+    onlyUnique(value, index, self) {
+      return self.indexOf(value) === index;
+    },
+    getCounts() {
+      const counts = {};
 
-    async calcResult() {
-      this.error = null
-      try {
-        await this.$apollo.mutate({
-          variables: {
-            id: scheese.id,
-          },
-          mutation: gql`
-            mutation calcResult($id: String!) {
-              calcResult(id: $id) {
-                id
-              }
-            }
-          `,
-        })
-      } catch (e) {
-        console.log("error", e)
+      for (const num of this.allVotes) {
+        counts[num] = counts[num] ? counts[num] + 1 : 1;
       }
+
+      console.log(counts[{'scheeseId': 1}], counts[{'scheeseId': 2}], counts[{'scheeseId': 3}], counts[{'scheeseId': 4}]);
+    },
+    async getPoints() {
+      console.log("getPoints:", this.admin_password)
+      this.$apollo.queries.allVotes.refetch()
     },
 
-    async removeScheese(scheese) {
-      this.error = null
-      try {
-        await this.$apollo.mutate({
-          variables: {
-            id: scheese.id,
-          },
-          mutation: gql`
-            mutation removeScheese($id: String!) {
-              removeScheese(id: $id) {
-                id
-              }
-            }
-          `,
-        })
-      } catch (e) {
-        console.log("error", e)
-      }
+    async calcResult() {
+      const scheeseIds = this.allVotes.map(v => {
+        return v.scheeseId
+      })
+      const uniqueIds = [...new Set(scheeseIds)]
+      console.log("scheeseIds", scheeseIds)
+      console.log("uniqueIds", uniqueIds)
     },
   },
 }
-</script>
 
->
+</script>

@@ -44,7 +44,7 @@
             <h5 class="center">&#8595;</h5>
           </div>
           <div v-else>
-            <h5 class="center">Ihr Ranking</h5>
+            <h5 class="center">Ihr Ranking (mind. 2 Spieler)</h5>
           </div>
           <draggable
             class="list-group rated-list"
@@ -109,7 +109,7 @@
           <b-button
             class="bottom-absolute-left mb-5"
             variant="success"
-            @click="addVotesVoting2"
+            @click="addVotesVoting3"
           >
             Ranking speichern
           </b-button>
@@ -422,7 +422,7 @@ export default {
     calculatePoints(evt) {
       // console.log(this.ratedScheese)
     },
-    async addVotesVoting2(e) {
+    async addVotesVoting3(e) {
       e.preventDefault()
       this.error = null
 
@@ -454,8 +454,8 @@ export default {
               votes: votes
             },
             mutation: gql`
-              mutation addVotesVoting2($votes: [VoteInput]!) {
-                addVotesVoting2(votes: $votes) {
+              mutation addVotesVoting3($votes: [VoteInput]!) {
+                addVotesVoting3(votes: $votes) {
                   id
                 }
               }

@@ -32,7 +32,9 @@ export const typeDefs = gql`
   extend type Query {
     votings(first: Int, after: String): VoteConnection
     voteById(id: ID!): Vote
-    votingsForScheese(scheese_id: ID!): [Vote]
+    votingsForScheeseVotingOne(scheese_id: ID!): [Vote]
+    votingsForScheeseVotingTwo(scheese_id: ID!): [Vote]
+    votingsForScheeseVotingThree(scheese_id: ID!): [Vote]
     pointsForScheese: Int
     allVotes: [Vote]
     allVotesVoting2: [Vote]

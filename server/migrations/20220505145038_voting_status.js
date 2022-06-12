@@ -1,9 +1,8 @@
 exports.up = (knex) =>
   knex.schema.createTable("voting_status", (t) => {
     t.increments("id");
-    t.boolean("voting_is_active")
-      .defaultTo(false)
-      .notNull();
+    t.enum("name", ["voting1", "voting2", "voting3"]);
+    t.enum("status", ["active", "inactive"]).defaultTo("inactive");
     t.string("voting_message");
     t.timestamps(true, true);
   });

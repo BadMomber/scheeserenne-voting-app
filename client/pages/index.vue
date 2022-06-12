@@ -407,6 +407,7 @@ export default {
       // const result = await this.$apollo.queries.voterById.refetch( { id: 1 } )
     },
     validateHash() {
+      console.log("!!!!! new Code !!!!!")
       console.log("addHash")
       console.log("this.voterList", this.voterList)
       console.log("this.v_hash", this.v_hash)

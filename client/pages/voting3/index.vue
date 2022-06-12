@@ -406,7 +406,7 @@ export default {
       //   e.voterHash
       // ))
       console.log("voterHashList", this.voterHashList)
-      const validHash = this.voterHashList.indexOf(this.voter_hash)
+      const validHash = this.voterHashList.indexOf(this.voter_hash.toLowerCase())
       console.log("validHash", validHash)
       console.log("votingStatus", this.votingStati)
 

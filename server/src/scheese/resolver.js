@@ -33,7 +33,6 @@ const scheeseListOne = async (root, args, ctx) => {
     .select("*")
     .where({ finished: true })
     .where({ class: "kat1" })
-    .orWhere({ class: "kat2" })
     .then((rows) => {
       return rows;
     });
@@ -46,6 +45,7 @@ const scheeseListTwo = async (root, args, ctx) => {
     .select("*")
     .where({ finished: true })
     .where({ class: "kat2" })
+    .orWhere({ class: "kat1" })
     .then((rows) => {
       return rows;
     });

@@ -441,7 +441,7 @@ export default {
 
             const v = {
               scheeseId: scheese.id,
-              voter_hash: this.voter_hash,
+              voter_hash: this.voter_hash.toLowerCase(),
               rank: index + 1,
               points: p
             }
@@ -501,7 +501,7 @@ export default {
       try {
         await this.$apollo.mutate({
           variables: {
-            voter_hash: this.voter_hash,
+            voter_hash: this.voter_hash.toLowerCase(),
             voted: true,
           },
           mutation: gql`

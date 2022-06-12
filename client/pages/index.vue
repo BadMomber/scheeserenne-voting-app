@@ -8,7 +8,7 @@
             <label class="mt-1" for="new-scheese-name"
               >Abstimmungscode hier eingeben: </label
             >
-            <b-form-input placeholder="Code..." id="new-scheese-name" v-model="voter_hash" />
+            <b-form-input placeholder="Code..." id="new-scheese-name" v-model="v_hash" />
           </b-form>
         </b-col>
 
@@ -349,7 +349,7 @@ export default {
   data: () => ({
     scheeseListOne: [],
     ratedScheese: [],
-    voter_hash: undefined,
+    v_hash: undefined,
     voterByHash: undefined,
     // voterById: undefined,
     voterList: undefined,
@@ -358,6 +358,9 @@ export default {
     id: 1,
   }),
   computed: {
+    voterHash() {
+      return this.v_hash.toLowerCase()
+    },
     maxPoints() {
       return this.scheeseListOne.length
     },
@@ -406,14 +409,12 @@ export default {
     validateHash() {
       console.log("addHash")
       console.log("this.voterList", this.voterList)
-      console.log("this.voter_hash", this.voter_hash)
+      console.log("this.v_hash", this.v_hash)
       // const voterHashList = this.voterList.map((e) => (
       //   e.voterHash
       // ))
       console.log("voterHashList", this.voterHashList)
-      const hash = this.voter_hash.toLowerCase()
-      console.log("hash")
-      const validHash = this.voterHashList.indexOf(hash)
+      const validHash = this.voterHashList.indexOf(this.voter_hash)
       console.log("validHash", validHash)
       console.log("votingStatus", this.votingStati)
 

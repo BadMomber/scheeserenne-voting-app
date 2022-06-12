@@ -6,7 +6,7 @@
         <b-col cols="12">
           <b-form>
             <label class="mt-1" for="new-scheese-name"
-              >Abstimmungscode hier eingeben {{voter_hash}} </label
+              >Abstimmungscode hier eingeben: </label
             >
             <b-form-input placeholder="Code..." id="new-scheese-name" v-model="voter_hash" />
           </b-form>
@@ -411,7 +411,7 @@ export default {
       //   e.voterHash
       // ))
       console.log("voterHashList", this.voterHashList)
-      const validHash = this.voterHashList.indexOf(this.voter_hash)
+      const validHash = this.voterHashList.indexOf(this.voter_hash.toLowerCase())
       console.log("validHash", validHash)
       console.log("votingStatus", this.votingStati)
 

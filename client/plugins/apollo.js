@@ -63,7 +63,6 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-console.log("apolloClient:", apolloClient);
 
 Vue.use(VueApollo);
 

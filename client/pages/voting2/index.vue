@@ -323,17 +323,6 @@ export default {
         }
       `,
     },
-    votingStati: {
-      query: gql`
-        query votingStati {
-          votingStati {
-            id
-            votingIsActive
-            votingMessage
-          }
-        }
-      `,
-    },
     voterList: {
       query: gql`
         query voterList {
@@ -353,7 +342,6 @@ export default {
     voterByHash: undefined,
     // voterById: undefined,
     voterList: undefined,
-    votingStati: [],
     ratedScheeseLengthPointStep: undefined,
     id: 1,
   }),
@@ -366,12 +354,6 @@ export default {
         e.voterHash
       ))
     },
-    votingStatus() {
-      return this.votingStati.map((e) => ({
-        voting_status: e.voting_status,
-        voting_message: e.voting_message
-      }))
-    }
   },
   variables() {
     return {

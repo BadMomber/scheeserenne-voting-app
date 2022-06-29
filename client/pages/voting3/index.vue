@@ -323,17 +323,6 @@ export default {
         }
       `,
     },
-    votingStati: {
-      query: gql`
-        query votingStati {
-          votingStati {
-            id
-            votingIsActive
-            votingMessage
-          }
-        }
-      `,
-    },
     voterList: {
       query: gql`
         query voterList {
@@ -345,15 +334,28 @@ export default {
         }
       `,
     },
+    votingThreeByVoterCode: {
+      query: gql`
+        query votingThreeByVoterCode {
+          votingThreeByVoterCode {
+            id
+            voterId
+            scheeseId
+            rank
+            points
+          }
+        }
+      `,
+    }
   },
   data: () => ({
+    votingThreeByVoterCode: undefined,
     scheeseListThree: [],
     ratedScheese: [],
     voter_hash: undefined,
     voterByHash: undefined,
     // voterById: undefined,
     voterList: undefined,
-    votingStati: [],
     ratedScheeseLengthPointStep: undefined,
     id: 1,
   }),
@@ -366,12 +368,6 @@ export default {
         e.voterHash
       ))
     },
-    votingStatus() {
-      return this.votingStati.map((e) => ({
-        voting_status: e.voting_status,
-        voting_message: e.voting_message
-      }))
-    }
   },
   variables() {
     return {
@@ -379,6 +375,17 @@ export default {
     }
   },
   methods: {
+    getVotesByVoterCode() {
+      this.$apollo.queries.votingThreeByVoterCode.refresh({
+      // New variables
+      variables: {
+        voter_hash: this.voter_hash,
+      }})
+
+      console.log("votingThreeByVoterCode:", votingThreeByVoterCode)
+
+      return votingThreeByVoterCode
+    },
     setActive() {
       console.log("setActive")
       if(this.scheeseListThree.length !== 0) {
@@ -408,7 +415,6 @@ export default {
       console.log("voterHashList", this.voterHashList)
       const validHash = this.voterHashList.indexOf(this.voter_hash.toLowerCase())
       console.log("validHash", validHash)
-      console.log("votingStatus", this.votingStati)
 
       return validHash
     },

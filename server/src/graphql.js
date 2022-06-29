@@ -25,11 +25,6 @@ import {
   resolvers as voteResolvers,
 } from "./vote/index.js";
 
-import {
-  typeDefs as votingStatiTypes,
-  resolvers as votingStatiResolvers,
-} from "./voting_status/index.js";
-
 const localDefs = gql`
   """
   An object with an ID
@@ -96,7 +91,6 @@ export const typeDefs = [
   scheeseTypes,
   voterTypes,
   voteTypes,
-  votingStatiTypes,
 ];
 
 export const resolvers = merge(
@@ -108,7 +102,6 @@ export const resolvers = merge(
   scheeseResolvers,
   voterResolvers,
   voteResolvers,
-  votingStatiResolvers,
 );
 
 export const schemaDirectives = merge({}, userDirectives);

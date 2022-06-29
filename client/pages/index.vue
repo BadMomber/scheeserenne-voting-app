@@ -1,6 +1,7 @@
 <template>
   <div>
-    <b-container id="main-content">
+    <div v-if="$apollo.loading">Loading...</div>
+    <b-container v-else id="main-content">
       <b-row class="justify-content-center">
 
         <b-col cols="12">
@@ -9,6 +10,21 @@
               >Abstimmungscode hier eingeben: </label
             >
             <b-form-input placeholder="Code..." id="new-scheese-name" v-model="voter_hash" />
+            <b-button
+            class="bottom-absolute-left mt-2 mb-5"
+            variant="warning"
+            @click="getVotesByVoterCode"
+          >
+            Ranking laden
+          </b-button>
+
+          <b-button
+            class="bottom-absolute-left mt-2 mb-5"
+            variant="success"
+            @click="addVotes"
+          >
+            Ranking speichern
+          </b-button>
           </b-form>
         </b-col>
 
@@ -17,30 +33,7 @@
           <div v-if="ratedScheese.length === 0" class="p-2">
             <h6 class="center red">
               Ziehen sie die Spieler zum bewerten hier hin.
-
-              <!-- <div class="popup" @click="togglePopup">
-                <b-button>Hilfe</b-button>
-                <span class="popuptext" id="myPopup">
-                  In der unteren Liste sehen Sie alle Scheese,
-                  die ihren Lauf beendet haben.
-                  <br>
-                  <br>
-                  Um eine Scheese zu bewerten,
-                  ziehen Sie die Scheese aus der unteren Liste in die
-                  obere Liste.
-                  <br>
-                  <br>
-                  Ordnen Sie die Scheese entsprechend
-                  Ihrer Wertung (Oben = meiste Punkte, unten = wenigste
-                  Punkte).
-                  <b-button id="close">X</b-button>
-                </span>
-              </div> -->
             </h6>
-            <!-- <p class="warning">
-              Um eine Scheese zu bewerten, ziehen Sie die Scheese bitte in
-              dieses Feld.
-            </p> -->
             <h5 class="center">&#8595;</h5>
           </div>
           <div v-else>
@@ -67,7 +60,7 @@
                 }"
               ></span>
               <span class="right">
-                <span class="rem2">{{ item.name }}</span
+                <span class="rem2">{{ item.name }} // {{ item.id }}</span
                 >
                 <b-badge variant="success" class="rem2 align-left rank"
                   >Rang: {{ index + 1 }}</b-badge
@@ -98,21 +91,12 @@
             >
               <img class ="platzhalter left" id="scheeseImg" :src="item.image">
               <span class="right">
-                <span class="rem2">{{ item.name }}</span
+                <span class="rem2">{{ item.name }} // {{ item.id }}</span
                 >
                 <span class="rem2 align-left rank">Rang: {{ index + 1 }}</span>
               </span>
             </li>
           </draggable>
-        </b-col>
-        <b-col cols="10 mt-5">
-          <b-button
-            class="bottom-absolute-left mb-5"
-            variant="success"
-            @click="addVotes"
-          >
-            Ranking speichern
-          </b-button>
         </b-col>
       </b-row>
     </b-container>
@@ -302,7 +286,6 @@ body {
 import gql from "graphql-tag"
 import draggable from "vuedraggable"
 
-
 export default {
   name: "TransitionExample",
   display: "Transition",
@@ -323,17 +306,6 @@ export default {
         }
       `,
     },
-    votingStati: {
-      query: gql`
-        query votingStati {
-          votingStati {
-            id
-            votingIsActive
-            votingMessage
-          }
-        }
-      `,
-    },
     voterList: {
       query: gql`
         query voterList {
@@ -345,15 +317,33 @@ export default {
         }
       `,
     },
+    votingOneByVoterCode: {
+      query: gql`
+        query votingOneByVoterCode($voter_hash: String!) {
+          votingOneByVoterCode(voter_hash: $voter_hash) {
+            id
+            voterId
+            scheeseId
+            rank
+            points
+          }
+        }
+      `,
+      variables () {
+        // Use vue reactive properties here
+        return {
+            voter_hash: this.voter_hash,
+        }
+      },
+    }
   },
   data: () => ({
+    votingOneByVoterCode: undefined,
     scheeseListOne: [],
     ratedScheese: [],
-    voter_hash: undefined,
+    voter_hash: '',
     voterByHash: undefined,
-    // voterById: undefined,
     voterList: undefined,
-    votingStati: [],
     ratedScheeseLengthPointStep: undefined,
     id: 1,
   }),
@@ -366,12 +356,6 @@ export default {
         e.voterHash
       ))
     },
-    votingStatus() {
-      return this.votingStati.map((e) => ({
-        voting_status: e.voting_status,
-        voting_message: e.voting_message
-      }))
-    }
   },
   variables() {
     return {
@@ -379,6 +363,33 @@ export default {
     }
   },
   methods: {
+    getVotesByVoterCode() {
+      console.log("this:", this.voter_hash)
+      this.$apollo.queries.votingOneByVoterCode.refresh({
+      // New variables
+      variables: {
+        voter_hash: this.voter_hash,
+      }})
+
+
+      console.log("this.votingOneByVoterCode: " + this.votingOneByVoterCode + " // called with: " + this.voter_hash)
+      this.sortRanked()
+    },
+    sortRanked() {
+      console.log("sortRanked", this.votingOneByVoterCode)
+      let counter = 0;
+      for(const scheese of this.votingOneByVoterCode) {
+        console.log("counter++", counter++)
+        // if(this.scheeseListOne.map((e) => (e.id)).indexOf(scheese.id) !== -1) {
+        console.log('scheese', scheese)
+        const found = this.scheeseListOne.find(element => element.id === scheese.scheeseId);
+        console.log("found:", found)
+        this.ratedScheese.push(found)
+        this.scheeseListOne.splice(this.scheeseListOne.indexOf(found), 1)
+        // this.scheeseListOne.splice(this.scheeseListOne.map((e) => (e.id)).indexOf(scheese.id))
+
+      }
+    },
     setActive() {
       console.log("setActive")
       console.log("this.scheeseListOne.length", this.scheeseListOne.length)
@@ -392,29 +403,19 @@ export default {
     },
     log(evt) {
       window.console.log(evt)
-      console.log("rataedScheese length:", this.ratedScheese)
+      console.log("ratedScheese length:", this.ratedScheese)
       // console.log("ratedScheese length: ", this.ratedScheese.length)
       // console.log("notRatedScheese length: ", this.scheeseListOne.length)
     },
     logRated() {
-      console.log("rataedScheese length:", this.ratedScheese)
+      console.log("ratedScheese length:", this.ratedScheese)
     },
     addHash() {
       this.validateHash()
       // const result = await this.$apollo.queries.voterById.refetch( { id: 1 } )
     },
     validateHash() {
-      console.log("addHash")
-      console.log("this.voterList", this.voterList)
-      console.log("this.voter_hash", this.voter_hash)
-      // const voterHashList = this.voterList.map((e) => (
-      //   e.voterHash
-      // ))
-      console.log("voterHashList", this.voterHashList)
       const validHash = this.voterHashList.indexOf(this.voter_hash.toLowerCase())
-      console.log("validHash", validHash)
-      console.log("votingStatus", this.votingStati)
-
       return validHash
     },
     sort() {

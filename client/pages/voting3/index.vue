@@ -9,6 +9,21 @@
               >Abstimmungscode hier eingeben {{voter_hash}} </label
             >
             <b-form-input placeholder="Code..." id="new-scheese-name" v-model="voter_hash" />
+            <b-button
+            class="bottom-absolute-left mt-2 mb-5"
+            variant="warning"
+            @click="getVotesByVoterCode"
+          >
+            Ranking laden
+          </b-button>
+
+          <b-button
+            class="bottom-absolute-left mt-2 mb-5"
+            variant="success"
+            @click="addVotesVoting3"
+          >
+            Ranking speichern
+          </b-button>
           </b-form>
         </b-col>
 
@@ -104,15 +119,6 @@
               </span>
             </li>
           </draggable>
-        </b-col>
-        <b-col cols="10 mt-5">
-          <b-button
-            class="bottom-absolute-left mb-5"
-            variant="success"
-            @click="addVotesVoting3"
-          >
-            Ranking speichern
-          </b-button>
         </b-col>
       </b-row>
     </b-container>
@@ -336,8 +342,8 @@ export default {
     },
     votingThreeByVoterCode: {
       query: gql`
-        query votingThreeByVoterCode {
-          votingThreeByVoterCode {
+        query votingThreeByVoterCode($voter_hash: String!) {
+          votingThreeByVoterCode(voter_hash: $voter_hash) {
             id
             voterId
             scheeseId
@@ -346,13 +352,19 @@ export default {
           }
         }
       `,
-    }
+      variables () {
+        // Use vue reactive properties here
+        return {
+            voter_hash: this.voter_hash,
+        }
+      },
+    },
   },
   data: () => ({
     votingThreeByVoterCode: undefined,
     scheeseListThree: [],
     ratedScheese: [],
-    voter_hash: undefined,
+    voter_hash: '',
     voterByHash: undefined,
     // voterById: undefined,
     voterList: undefined,
@@ -376,15 +388,16 @@ export default {
   },
   methods: {
     getVotesByVoterCode() {
+      console.log("this:", this.voter_hash)
       this.$apollo.queries.votingThreeByVoterCode.refresh({
       // New variables
       variables: {
         voter_hash: this.voter_hash,
       }})
 
-      console.log("votingThreeByVoterCode:", votingThreeByVoterCode)
 
-      return votingThreeByVoterCode
+      console.log("this.votingThreeByVoterCode: " + this.votingThreeByVoterCode + " // called with: " + this.voter_hash)
+      this.sortRanked()
     },
     setActive() {
       console.log("setActive")

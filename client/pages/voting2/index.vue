@@ -9,6 +9,21 @@
               >Abstimmungscode hier eingeben {{voter_hash}} </label
             >
             <b-form-input placeholder="Code..." id="new-scheese-name" v-model="voter_hash" />
+            <b-button
+            class="bottom-absolute-left mt-2 mb-5"
+            variant="warning"
+            @click="getVotesByVoterCode"
+          >
+            Ranking laden
+          </b-button>
+
+          <b-button
+            class="bottom-absolute-left mt-2 mb-5"
+            variant="success"
+            @click="addVotesVoting2"
+          >
+            Ranking speichern
+          </b-button>
           </b-form>
         </b-col>
 
@@ -104,15 +119,6 @@
               </span>
             </li>
           </draggable>
-        </b-col>
-        <b-col cols="10 mt-5">
-          <b-button
-            class="bottom-absolute-left mb-5"
-            variant="success"
-            @click="addVotesVoting2"
-          >
-            Ranking speichern
-          </b-button>
         </b-col>
       </b-row>
     </b-container>
@@ -334,11 +340,31 @@ export default {
         }
       `,
     },
+    votingTwoByVoterCode: {
+      query: gql`
+        query votingTwoByVoterCode($voter_hash: String!) {
+          votingTwoByVoterCode(voter_hash: $voter_hash) {
+            id
+            voterId
+            scheeseId
+            rank
+            points
+          }
+        }
+      `,
+      variables () {
+        // Use vue reactive properties here
+        return {
+            voter_hash: this.voter_hash,
+        }
+      },
+    }
   },
   data: () => ({
+    votingTwoByVoterCode: undefined,
     scheeseListTwo: [],
     ratedScheese: [],
-    voter_hash: undefined,
+    voter_hash: '',
     voterByHash: undefined,
     // voterById: undefined,
     voterList: undefined,
@@ -361,6 +387,18 @@ export default {
     }
   },
   methods: {
+    getVotesByVoterCode() {
+      console.log("this:", this.voter_hash)
+      this.$apollo.queries.votingTwoByVoterCode.refresh({
+      // New variables
+      variables: {
+        voter_hash: this.voter_hash,
+      }})
+
+
+      console.log("this.votingTwoByVoterCode: " + this.votingTwoByVoterCode + " // called with: " + this.voter_hash)
+      this.sortRanked()
+    },
     setActive() {
       console.log("setActive")
       if(this.scheeseListTwo.length !== 0) {

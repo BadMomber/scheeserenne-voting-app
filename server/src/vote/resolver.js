@@ -147,17 +147,63 @@ const allVotesVoting2 = async (root, args, ctx) => {
     "SELECT DISTINCT scheese_id, points_total from (SELECT scheese_id, points, SUM(points) over (partition by scheese_id) as points_total FROM votings_2 order by scheese_id) AS x;",
   );
 
-  console.log("votes");
+  const votings = await db
+    .table("votings_2")
+    .select("*")
+    .then(rows => {
+      return rows;
+    });
+
+  console.log("votings:", votings.length);
 
   // TODO: Get sum of votes for one scheese. Divide points for scheese by sum of votes for scheese.
   console.log("votes:", votes.rows.sort(comparePoints));
 
-  return votes.rows
+  const sidArr = [];
+
+  for (let i = 0; i < votings.length; i++) {
+    sidArr.push(votings[i].scheeseId);
+  }
+
+  const uniq = [...new Set(sidArr)];
+
+  console.log("sidArr: ", sidArr);
+
+  console.log("uniq:", uniq);
+
+  const uniqObj = uniq.map(u => ({
+    scheeseId: u,
+    numberOfVotes: 0,
+  }));
+
+  for (const vote of votings) {
+    for (const id of uniqObj) {
+      if (vote.scheeseId === id.scheeseId) {
+        id.numberOfVotes++;
+      }
+    }
+  }
+
+  console.log("uniqObj: ", uniqObj);
+
+  const result = votes.rows
     .map(v => ({
       scheeseId: v.scheese_id,
       points: v.points_total,
     }))
     .sort(comparePoints);
+
+  for (const res of result) {
+    for (const id of uniqObj) {
+      if (res.scheeseId === id.scheeseId) {
+        res.points = res.points / id.numberOfVotes;
+      }
+    }
+  }
+
+  console.log("result: ", result);
+
+  return result;
 };
 
 const allVotesVoting3 = async (root, args, ctx) => {
@@ -166,17 +212,63 @@ const allVotesVoting3 = async (root, args, ctx) => {
     "SELECT DISTINCT scheese_id, points_total from (SELECT scheese_id, points, SUM(points) over (partition by scheese_id) as points_total FROM votings_3 order by scheese_id) AS x;",
   );
 
-  console.log("votes");
+  const votings = await db
+    .table("votings_3")
+    .select("*")
+    .then(rows => {
+      return rows;
+    });
+
+  console.log("votings:", votings.length);
 
   // TODO: Get sum of votes for one scheese. Divide points for scheese by sum of votes for scheese.
   console.log("votes:", votes.rows.sort(comparePoints));
 
-  return votes.rows
+  const sidArr = [];
+
+  for (let i = 0; i < votings.length; i++) {
+    sidArr.push(votings[i].scheeseId);
+  }
+
+  const uniq = [...new Set(sidArr)];
+
+  console.log("sidArr: ", sidArr);
+
+  console.log("uniq:", uniq);
+
+  const uniqObj = uniq.map(u => ({
+    scheeseId: u,
+    numberOfVotes: 0,
+  }));
+
+  for (const vote of votings) {
+    for (const id of uniqObj) {
+      if (vote.scheeseId === id.scheeseId) {
+        id.numberOfVotes++;
+      }
+    }
+  }
+
+  console.log("uniqObj: ", uniqObj);
+
+  const result = votes.rows
     .map(v => ({
       scheeseId: v.scheese_id,
       points: v.points_total,
     }))
     .sort(comparePoints);
+
+  for (const res of result) {
+    for (const id of uniqObj) {
+      if (res.scheeseId === id.scheeseId) {
+        res.points = res.points / id.numberOfVotes;
+      }
+    }
+  }
+
+  console.log("result: ", result);
+
+  return result;
 };
 
 const votingOneByVoterCode = async (root, args, ctx) => {
@@ -201,7 +293,7 @@ const votingOneByVoterCode = async (root, args, ctx) => {
 const votingTwoByVoterCode = async (root, args, ctx) => {
   const v = await db("votings_2")
     .select("*")
-    .where({ voter_hash: args.voter.hash })
+    .where({ voter_hash: args.voter_hash })
     .then(rows => {
       return rows;
     });
@@ -212,7 +304,7 @@ const votingTwoByVoterCode = async (root, args, ctx) => {
 const votingThreeByVoterCode = async (root, args, ctx) => {
   const v = await db("votings_3")
     .select("*")
-    .where({ voter_hash: args.voter.hash })
+    .where({ voter_hash: args.voter_hash })
     .then(rows => {
       return rows;
     });

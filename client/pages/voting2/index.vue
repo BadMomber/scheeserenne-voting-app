@@ -400,9 +400,9 @@ export default {
       this.sortRanked()
     },
     sortRanked() {
-      console.log("sortRanked", this.votingOneByVoterCode)
+      console.log("sortRanked", this.votingTwoByVoterCode)
       let counter = 0;
-      for(const scheese of this.votingOneByVoterCode) {
+      for(const scheese of this.votingTwoByVoterCode) {
         console.log("counter++", counter++)
         // if(this.scheeseListTwo.map((e) => (e.id)).indexOf(scheese.id) !== -1) {
         console.log('scheese', scheese)

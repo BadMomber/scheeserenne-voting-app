@@ -400,17 +400,17 @@ export default {
       this.sortRanked()
     },
     sortRanked() {
-      console.log("sortRanked", this.votingOneByVoterCode)
+      console.log("sortRanked", this.votingThreeByVoterCode)
       let counter = 0;
-      for(const scheese of this.votingOneByVoterCode) {
+      for(const scheese of this.votingThreeByVoterCode) {
         console.log("counter++", counter++)
-        // if(this.scheeseListOne.map((e) => (e.id)).indexOf(scheese.id) !== -1) {
+        // if(this.scheeseListThree.map((e) => (e.id)).indexOf(scheese.id) !== -1) {
         console.log('scheese', scheese)
-        const found = this.scheeseListOne.find(element => element.id === scheese.scheeseId);
+        const found = this.scheeseListThree.find(element => element.id === scheese.scheeseId);
         console.log("found:", found)
         this.ratedScheese.push(found)
-        this.scheeseListOne.splice(this.scheeseListOne.indexOf(found), 1)
-        // this.scheeseListOne.splice(this.scheeseListOne.map((e) => (e.id)).indexOf(scheese.id))
+        this.scheeseListThree.splice(this.scheeseListThree.indexOf(found), 1)
+        // this.scheeseListThree.splice(this.scheeseListThree.map((e) => (e.id)).indexOf(scheese.id))
 
       }
     },

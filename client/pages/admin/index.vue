@@ -41,9 +41,6 @@
           >
         </b-form>
         </b-col>
-        <b-col>
-          <div>{{ allVotes }}</div>
-        </b-col>
       </b-row>
     </b-container>
   </div>
@@ -71,6 +68,15 @@ export default {
     },
   },
   methods: {
+    comparePoints(a, b) {
+      if (a.points > b.points) {
+        return -1;
+      }
+      if (a.points < b.points) {
+        return 1;
+      }
+      return 0;
+    },
     onlyUnique(value, index, self) {
       return self.indexOf(value) === index;
     },
@@ -86,6 +92,8 @@ export default {
     async getPoints() {
       console.log("getPoints:", this.admin_password)
       this.$apollo.queries.allVotes.refetch()
+
+      this.allVotes = this.allVotes.sort(this.comparePoints);
     },
 
     async calcResult() {

@@ -32,12 +32,12 @@
           <!-- https://sortablejs.github.io/Vue.Draggable/#/transition-example-2 -->
           <div v-if="ratedScheese.length === 0" class="p-2">
             <h6 class="center red">
-              Ziehen sie die Spieler zum bewerten hier hin.
+              Ziehen sie die Scheese zum bewerten hier hin.
             </h6>
             <h5 class="center">&#8595;</h5>
           </div>
           <div v-else>
-            <h5 class="center">Ihr Ranking (mind. 2 Spieler)</h5>
+            <h5 class="center">Ihr Ranking (mind. 2 Scheese)</h5>
           </div>
           <draggable
             class="list-group rated-list"
@@ -69,11 +69,11 @@
             </div>
           </draggable>
           <b-col v-if="scheeseListOne.length !== 0" cols="12">
-            <h5 class="mt-5">Noch nicht gewertete Spieler</h5>
+            <h5 class="mt-5">Noch nicht gewertete Scheese</h5>
             <h5 class="center">&#8595;</h5>
           </b-col>
           <b-col v-else cols="12">
-            <h5 class="done mt-5">Es gibt keine Spieler zu bewerten.</h5>
+            <h5 class="done mt-5">Es gibt keine Scheese zu bewerten.</h5>
           </b-col>
           <draggable
             class="list-group not-rated-list"

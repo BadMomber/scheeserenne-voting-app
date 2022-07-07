@@ -399,6 +399,21 @@ export default {
       console.log("this.votingTwoByVoterCode: " + this.votingTwoByVoterCode + " // called with: " + this.voter_hash)
       this.sortRanked()
     },
+    sortRanked() {
+      console.log("sortRanked", this.votingOneByVoterCode)
+      let counter = 0;
+      for(const scheese of this.votingOneByVoterCode) {
+        console.log("counter++", counter++)
+        // if(this.scheeseListOne.map((e) => (e.id)).indexOf(scheese.id) !== -1) {
+        console.log('scheese', scheese)
+        const found = this.scheeseListOne.find(element => element.id === scheese.scheeseId);
+        console.log("found:", found)
+        this.ratedScheese.push(found)
+        this.scheeseListOne.splice(this.scheeseListOne.indexOf(found), 1)
+        // this.scheeseListOne.splice(this.scheeseListOne.map((e) => (e.id)).indexOf(scheese.id))
+
+      }
+    },
     setActive() {
       console.log("setActive")
       if(this.scheeseListTwo.length !== 0) {

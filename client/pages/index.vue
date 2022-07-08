@@ -436,14 +436,15 @@ export default {
         if(this.validateHash() != -1) {
 
           let divisor = 1
-            if (this.ratedScheese.length > 1) {
-            divisor = this.ratedScheese.length - 1
+          if (this.ratedScheese.length > 1) {
+            divisor = this.ratedScheese.length + 1
           }
+
           console.log("divisor", divisor)
           const votes = []
 
           this.ratedScheese.forEach(async(scheese, index) => {
-            const p = (this.ratedScheese.length - index - 1) / divisor
+            const p = (this.ratedScheese.length - index) / divisor
 
             const v = {
               scheeseId: scheese.id,

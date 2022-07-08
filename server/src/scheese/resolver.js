@@ -10,7 +10,7 @@ const scheese = async (root, args, { currentUser }) => {
     .select("*", db.raw("count(*) OVER() as total_count"))
     .limit(limit)
     .offset(offset)
-    .then(rows => {
+    .then((rows) => {
       return rows;
     });
 
@@ -30,7 +30,7 @@ const scheeseListOne = async (root, args, ctx) => {
     .select("*")
     .where({ finished: true })
     .where({ class: "kat1" })
-    .then(rows => {
+    .then((rows) => {
       return rows;
     });
   return data;
@@ -41,8 +41,7 @@ const scheeseListTwo = async (root, args, ctx) => {
     .select("*")
     .where({ finished: true })
     .where({ class: "kat2" })
-    .orWhere({ class: "kat1" })
-    .then(rows => {
+    .then((rows) => {
       return rows;
     });
   return data;
@@ -53,7 +52,7 @@ const scheeseListThree = async (root, args, ctx) => {
     .select("*")
     .where({ finished: true })
     .where({ class: "kat3" })
-    .then(rows => {
+    .then((rows) => {
       return rows;
     });
   return data;
@@ -71,7 +70,7 @@ const finishedScheese = async (root, args, ctx) => {
   const data = await db("scheese")
     .select("*")
     .where({ finished: true })
-    .then(rows => {
+    .then((rows) => {
       return rows;
     });
 
@@ -82,7 +81,7 @@ const notFinishedScheese = async (root, args, ctx) => {
   const data = await db("scheese")
     .select("*")
     .where({ finished: false })
-    .then(rows => {
+    .then((rows) => {
       return rows;
     });
 

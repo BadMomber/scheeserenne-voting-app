@@ -22,7 +22,7 @@
             </div>
         </b-col>
         <b-col v-if="allVotesVoting2" cols="4 mt-5">
-        <h2>Ranking 1</h2>
+        <h2>Ranking 2</h2>
           <h2>Result</h2>
           <div
               v-for="(v) in allVotesVoting2"
@@ -41,7 +41,7 @@
             </div>
         </b-col>
         <b-col v-if="allVotesVoting3" cols="4 mt-5">
-        <h2>Ranking 1</h2>
+        <h2>Ranking 3</h2>
           <h2>Result</h2>
           <div
               v-for="(v) in allVotesVoting3"

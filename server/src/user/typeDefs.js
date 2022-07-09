@@ -1,4 +1,4 @@
-import { gql } from "apollo-server-express"
+import { gql } from "apollo-server-express";
 
 export const typeDefs = gql`
   enum Role {
@@ -21,6 +21,11 @@ export const typeDefs = gql`
     updatedtAt: String
   }
 
+  type Pass implements Node {
+    id: ID!
+    password: String!
+  }
+
   type UserConnection implements Connection {
     edges: [UserEdge]
     pageInfo: PageInfo!
@@ -36,6 +41,7 @@ export const typeDefs = gql`
     me: User
     users(first: Int, after: String): UserConnection @role(requires: ADMIN)
     userById(id: ID!): User @role(requires: ADMIN)
+    password: Pass
   }
 
   type Mutation {
@@ -49,4 +55,4 @@ export const typeDefs = gql`
       password: String!
     ): User
   }
-`
+`;

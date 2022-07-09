@@ -60,7 +60,7 @@
                 }"
               ></span>
               <span class="right">
-                <span class="rem2">{{ item.name }} // {{ item.id }}</span
+                <span class="rem2">{{ item.name }}</span
                 >
                 <b-badge variant="success" class="rem2 align-left rank"
                   >Rang: {{ index + 1 }}</b-badge
@@ -91,7 +91,7 @@
             >
               <img class ="platzhalter left" id="scheeseImg" :src="item.image">
               <span class="right">
-                <span class="rem2">{{ item.name }} // {{ item.id }}</span
+                <span class="rem2">{{ item.name }}</span
                 >
                 <span class="rem2 align-left rank">Rang: {{ index + 1 }}</span>
               </span>

@@ -471,7 +471,7 @@ export default {
           const votes = []
 
           this.ratedScheese.forEach(async(scheese, index) => {
-            const p = (this.ratedScheese.length - index - 1) / divisor
+            const p = (this.ratedScheese.length - index) / divisor
 
             const v = {
               scheeseId: scheese.id,
@@ -482,6 +482,7 @@ export default {
 
             votes.push(v)
           })
+
 
           await this.$apollo.mutate({
             variables: {

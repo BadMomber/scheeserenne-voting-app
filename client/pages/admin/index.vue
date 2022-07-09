@@ -129,6 +129,16 @@ export default {
         }
       `,
     },
+    password: {
+      query: gql`
+        query password {
+          password {
+            id
+            password
+          }
+        }
+      `,
+    },
   },
   methods: {
     comparePoints(a, b) {
@@ -160,21 +170,26 @@ export default {
 
     },
     async getPoints() {
-      console.log("getPoints:", this.admin_password)
-      this.$apollo.queries.allVotes.refetch()
+      if(this.admin_password === this.password) {
+        console.log("getPoints:", this.admin_password)
+        this.$apollo.queries.allVotes.refetch()
 
-      this.allVotes = this.allVotes.sort(this.comparePoints);
+        console.log("this.password", this.password)
+        this.allVotes = this.allVotes.sort(this.comparePoints);
+      }
     },
     async getPoints2() {
       console.log("getPoints:", this.admin_password)
       this.$apollo.queries.allVotesVoting2.refetch()
 
+      console.log("this.password", this.password)
       this.allVotesVoting2 = this.allVotesVoting2.sort(this.comparePoints);
     },
     async getPoints3() {
       console.log("getPoints:", this.admin_password)
       this.$apollo.queries.allVotesVoting3.refetch()
 
+      console.log("this.password", this.password)
       this.allVotesVoting3 = this.allVotesVoting3.sort(this.comparePoints);
     },
 

@@ -36,11 +36,16 @@ const userById = async (root, args, ctx) => {
     .where({ id: args.id })
     .first();
 
-  console.log("root: ", root);
-  console.log("args: ", args);
-  console.log("user: ", user);
-  console.log("ctx: ", ctx);
   return user;
+};
+
+const password = async (root, args, ctx) => {
+  const pass = await db("user")
+    .select("*")
+    .first();
+
+  console.log("pass:", pass);
+  return pass;
 };
 
 const newUser = async (root, args, ctx) => {
@@ -123,6 +128,7 @@ export const resolvers = {
     me: (root, args, { userId }) => userById(root, { id: userId }),
     users,
     userById,
+    password,
   },
 
   Mutation: {

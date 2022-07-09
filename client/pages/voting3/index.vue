@@ -465,7 +465,7 @@ export default {
 
           let divisor = 1
             if (this.ratedScheese.length > 1) {
-            divisor = this.ratedScheese.length - 1
+            divisor = this.ratedScheese.length + 1
           }
           console.log("divisor", divisor)
           const votes = []

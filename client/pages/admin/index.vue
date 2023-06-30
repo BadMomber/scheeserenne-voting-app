@@ -170,13 +170,11 @@ export default {
 
     },
     async getPoints() {
-      if(this.admin_password === this.password) {
-        console.log("getPoints:", this.admin_password)
-        this.$apollo.queries.allVotes.refetch()
+      console.log("getPoints:", this.admin_password)
+      this.$apollo.queries.allVotes.refetch()
 
-        console.log("this.password", this.password)
-        this.allVotes = this.allVotes.sort(this.comparePoints);
-      }
+      console.log("this.password", this.password)
+      this.allVotes = this.allVotes.sort(this.comparePoints);
     },
     async getPoints2() {
       console.log("getPoints:", this.admin_password)

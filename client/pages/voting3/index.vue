@@ -2,28 +2,31 @@
   <div>
     <b-container id="main-content">
       <b-row class="justify-content-center">
-
         <b-col cols="12">
           <b-form>
             <label class="mt-1" for="new-scheese-name"
-              >Abstimmungscode hier eingeben {{voter_hash}} </label
-            >
-            <b-form-input placeholder="Code..." id="new-scheese-name" v-model="voter_hash" />
+              >Abstimmungscode hier eingeben {{ voter_hash }}
+            </label>
+            <b-form-input
+              placeholder="Code..."
+              id="new-scheese-name"
+              v-model="voter_hash"
+            />
             <b-button
-            class="bottom-absolute-left mt-2 mb-5"
-            variant="warning"
-            @click="getVotesByVoterCode"
-          >
-            Ranking laden
-          </b-button>
+              class="bottom-absolute-left mt-2 mb-5"
+              variant="warning"
+              @click="getVotesByVoterCode"
+            >
+              Ranking laden
+            </b-button>
 
-          <b-button
-            class="bottom-absolute-left mt-2 mb-5"
-            variant="success"
-            @click="addVotesVoting3"
-          >
-            Ranking speichern
-          </b-button>
+            <b-button
+              class="bottom-absolute-left mt-2 mb-5"
+              variant="success"
+              @click="addVotesVoting3"
+            >
+              Ranking speichern
+            </b-button>
           </b-form>
         </b-col>
 
@@ -59,7 +62,9 @@
             <h5 class="center">&#8595;</h5>
           </div>
           <div v-else>
-            <h5 class="center">Ihr Ranking (mind. 2 Scheese)</h5>
+            <h5 class="center">
+              Wählen Sie ihre liebsten drei Scheesen! (mind. 2)
+            </h5>
           </div>
           <draggable
             class="list-group rated-list"
@@ -77,13 +82,11 @@
               <span
                 class="platzhalter left"
                 :style="{
-                  backgroundImage:
-                    'url(' + item.image + ')',
+                  backgroundImage: 'url(' + item.image + ')'
                 }"
               ></span>
               <span class="right">
-                <span class="rem2">{{ item.name }}</span
-                >
+                <span class="rem2">{{ item.name }}</span>
                 <b-badge variant="success" class="rem2 align-left rank"
                   >Rang: {{ index + 1 }}</b-badge
                 >
@@ -111,10 +114,9 @@
               class="list-group-item shadow display-flex not-rated"
               :v-bind="item.id"
             >
-              <img class ="platzhalter left" id="scheeseImg" :src="item.image">
+              <img class="platzhalter left" id="scheeseImg" :src="item.image" />
               <span class="right">
-                <span class="rem2">{{ item.name }}</span
-                >
+                <span class="rem2">{{ item.name }}</span>
                 <span class="rem2 align-left rank">Rang: {{ index + 1 }}</span>
               </span>
             </li>
@@ -296,7 +298,7 @@ body {
 }
 
 .navbar-expand .navbar-collapse {
-    justify-content: space-evenly;
+  justify-content: space-evenly;
 }
 
 .active {
@@ -305,16 +307,15 @@ body {
 </style>
 
 <script>
-import gql from "graphql-tag"
-import draggable from "vuedraggable"
-
+import gql from "graphql-tag";
+import draggable from "vuedraggable";
 
 export default {
   name: "TransitionExample",
   display: "Transition",
   order: 6,
   components: {
-    draggable,
+    draggable
   },
   apollo: {
     scheeseListThree: {
@@ -327,7 +328,7 @@ export default {
             finished
           }
         }
-      `,
+      `
     },
     voterList: {
       query: gql`
@@ -338,7 +339,7 @@ export default {
             hasVoted
           }
         }
-      `,
+      `
     },
     votingThreeByVoterCode: {
       query: gql`
@@ -352,72 +353,76 @@ export default {
           }
         }
       `,
-      variables () {
+      variables() {
         // Use vue reactive properties here
         return {
-            voter_hash: this.voter_hash,
-        }
-      },
-    },
+          voter_hash: this.voter_hash
+        };
+      }
+    }
   },
   data: () => ({
     votingThreeByVoterCode: undefined,
     scheeseListThree: [],
     ratedScheese: [],
-    voter_hash: '',
+    voter_hash: "",
     voterByHash: undefined,
     // voterById: undefined,
     voterList: undefined,
     ratedScheeseLengthPointStep: undefined,
-    id: 1,
+    id: 1
   }),
   computed: {
     maxPoints() {
-      return this.scheeseListThree.length
+      return this.scheeseListThree.length;
     },
     voterHashList() {
-      return this.voterList.map((e) => (
-        e.voterHash
-      ))
-    },
+      return this.voterList.map(e => e.voterHash);
+    }
   },
   variables() {
     return {
-      id: this.id,
-    }
+      id: this.id
+    };
   },
   methods: {
     getVotesByVoterCode() {
-      console.log("this:", this.voter_hash)
+      console.log("this:", this.voter_hash);
       this.$apollo.queries.votingThreeByVoterCode.refresh({
-      // New variables
-      variables: {
-        voter_hash: this.voter_hash,
-      }})
+        // New variables
+        variables: {
+          voter_hash: this.voter_hash
+        }
+      });
 
-
-      console.log("this.votingThreeByVoterCode: " + this.votingThreeByVoterCode + " // called with: " + this.voter_hash)
-      this.sortRanked()
+      console.log(
+        "this.votingThreeByVoterCode: " +
+          this.votingThreeByVoterCode +
+          " // called with: " +
+          this.voter_hash
+      );
+      this.sortRanked();
     },
     sortRanked() {
-      console.log("sortRanked", this.votingThreeByVoterCode)
+      console.log("sortRanked", this.votingThreeByVoterCode);
       let counter = 0;
-      for(const scheese of this.votingThreeByVoterCode) {
-        console.log("counter++", counter++)
+      for (const scheese of this.votingThreeByVoterCode) {
+        console.log("counter++", counter++);
         // if(this.scheeseListThree.map((e) => (e.id)).indexOf(scheese.id) !== -1) {
-        console.log('scheese', scheese)
-        const found = this.scheeseListThree.find(element => element.id === scheese.scheeseId);
-        console.log("found:", found)
-        this.ratedScheese.push(found)
-        this.scheeseListThree.splice(this.scheeseListThree.indexOf(found), 1)
+        console.log("scheese", scheese);
+        const found = this.scheeseListThree.find(
+          element => element.id === scheese.scheeseId
+        );
+        console.log("found:", found);
+        this.ratedScheese.push(found);
+        this.scheeseListThree.splice(this.scheeseListThree.indexOf(found), 1);
         // this.scheeseListThree.splice(this.scheeseListThree.map((e) => (e.id)).indexOf(scheese.id))
-
       }
     },
     setActive() {
-      console.log("setActive")
-      if(this.scheeseListThree.length !== 0) {
-        document.getElementById("voting3").classList.add('active');
+      console.log("setActive");
+      if (this.scheeseListThree.length !== 0) {
+        document.getElementById("voting3").classList.add("active");
       }
     },
     togglePopup() {
@@ -425,64 +430,69 @@ export default {
       popup.classList.toggle("show");
     },
     log(evt) {
-      window.console.log(evt)
+      window.console.log(evt);
       // console.log("ratedScheese length: ", this.ratedScheese.length)
       // console.log("notRatedScheese length: ", this.scheeseListThree.length)
     },
     addHash() {
-      this.validateHash()
+      this.validateHash();
       // const result = await this.$apollo.queries.voterById.refetch( { id: 1 } )
     },
     validateHash() {
-      console.log("addHash")
-      console.log("this.voterList", this.voterList)
-      console.log("this.voter_hash", this.voter_hash)
+      console.log("addHash");
+      console.log("this.voterList", this.voterList);
+      console.log("this.voter_hash", this.voter_hash);
       // const voterHashList = this.voterList.map((e) => (
       //   e.voterHash
       // ))
-      console.log("voterHashList", this.voterHashList)
-      const validHash = this.voterHashList.indexOf(this.voter_hash.toLowerCase())
-      console.log("validHash", validHash)
+      console.log("voterHashList", this.voterHashList);
+      const validHash = this.voterHashList.indexOf(
+        this.voter_hash.toLowerCase()
+      );
+      console.log("validHash", validHash);
 
-      return validHash
+      return validHash;
     },
     sort() {
-      this.scheeseListThree = this.scheeseListThree.sort((a, b) => a.order - b.order)
+      this.scheeseListThree = this.scheeseListThree.sort(
+        (a, b) => a.order - b.order
+      );
     },
     pointMapper(index) {
       // console.log("index:", index)
-      return this.maxPoints - index
+      return this.maxPoints - index;
     },
-    calculatePoints(evt) {
-      // console.log(this.ratedScheese)
+    calculatePoints() {
+      // Wenn es mehr als 3 Elemente in der Liste gibt
+      if (this.ratedScheese.length > 3) {
+        // Entferne das letzte Element und füge es der scheeseListOne hinzu
+        const lastElement = this.ratedScheese.pop();
+        this.scheeseListThree.push(lastElement);
+      }
     },
     async addVotesVoting3(e) {
-      e.preventDefault()
-      this.error = null
+      e.preventDefault();
+      this.error = null;
 
       try {
-        if(this.validateHash() != -1) {
-
-          let divisor = 1
-            if (this.ratedScheese.length > 1) {
-            divisor = this.ratedScheese.length + 1
+        if (this.validateHash() != -1) {
+          let divisor = 1;
+          if (this.ratedScheese.length > 1) {
+            divisor = this.ratedScheese.length + 1;
           }
-          console.log("divisor", divisor)
-          const votes = []
+          console.log("divisor", divisor);
+          const votes = [];
 
-          this.ratedScheese.forEach(async(scheese, index) => {
-            const p = (this.ratedScheese.length - index) / divisor
-
+          this.ratedScheese.forEach(async (scheese, index) => {
             const v = {
               scheeseId: scheese.id,
               voter_hash: this.voter_hash.toLowerCase(),
               rank: index + 1,
-              points: p
-            }
+              points: maxPoints - index
+            };
 
-            votes.push(v)
-          })
-
+            votes.push(v);
+          });
 
           await this.$apollo.mutate({
             variables: {
@@ -494,64 +504,63 @@ export default {
                   id
                 }
               }
-            `,
-          })
+            `
+          });
 
           this.$toasted.show("Erfolgreich abgestimmt", {
-              type: "success",
-              duration: 2500,
-              action: {
-                text: "OK",
-                onClick: (e, toastObject) => {
-                  toastObject.goAway(0)
-                },
-              },
-            })
-
+            type: "success",
+            duration: 2500,
+            action: {
+              text: "OK",
+              onClick: (e, toastObject) => {
+                toastObject.goAway(0);
+              }
+            }
+          });
         } else {
-            this.$toasted.show("Kein gültiger Abstimmungscode", {
-              type: "error",
-              duration: 2500,
-              action: {
-                text: "OK",
-                onClick: (e, toastObject) => {
-                  toastObject.goAway(0)
-                },
-              },
-            })
+          this.$toasted.show("Kein gültiger Abstimmungscode", {
+            type: "error",
+            duration: 2500,
+            action: {
+              text: "OK",
+              onClick: (e, toastObject) => {
+                toastObject.goAway(0);
+              }
+            }
+          });
 
-            throw new Error("invalid voter code")
-          }
+          throw new Error("invalid voter code");
+        }
 
         // console.log("this", this.scheeseListThree)
-        this.setHasVoted(e)
-      } catch(e) {
-        console.log("Error adding votes:", e)
+        this.setHasVoted(e);
+      } catch (e) {
+        console.log("Error adding votes:", e);
       }
     },
     async setHasVoted(e) {
-      e.preventDefault()
+      e.preventDefault();
 
-      this.error = null
+      this.error = null;
       try {
         await this.$apollo.mutate({
           variables: {
             voter_hash: this.voter_hash.toLowerCase(),
-            voted: true,
+            voted: true
           },
           mutation: gql`
             mutation setHasVoted($voter_hash: String!, $voted: Boolean!) {
               setHasVoted(voter_hash: $voter_hash, voted: $voted)
             }
-          `,
-        })
+          `
+        });
       } catch (e) {
-        console.log("error", e)
+        console.log("error", e);
       }
-    },
+    }
   },
-  updated(){
-    this.setActive()
-  },
-}
+  updated() {
+    this.setActive();
+  }
+};
 </script>

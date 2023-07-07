@@ -470,6 +470,8 @@ export default {
             votes.push(v);
           });
 
+          console.log("votes array:", votes);
+
           await this.$apollo.mutate({
             variables: {
               votes: votes

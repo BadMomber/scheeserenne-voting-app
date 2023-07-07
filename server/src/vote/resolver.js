@@ -1,15 +1,15 @@
-import _ from "lodash";
-import { connectionFromArraySlice, cursorToOffset } from "graphql-relay";
+import _ from 'lodash';
+import { connectionFromArraySlice, cursorToOffset } from 'graphql-relay';
 
-import db from "../db.js";
+import db from '../db.js';
 
 const votings = async (root, args, { currentvote }) => {
-  const limit = typeof args.first === "undefined" ? "200" : args.first;
+  const limit = typeof args.first === 'undefined' ? '200' : args.first;
   const offset = args.after ? cursorToOffset(args.after) + 1 : 0;
 
   const data = await db
-    .table("votings")
-    .select("*", db.raw("count(*) OVER() as total_count"))
+    .table('votings')
+    .select('*', db.raw('count(*) OVER() as total_count'))
     .limit(limit)
     .offset(offset)
     .then((rows) => {
@@ -28,10 +28,10 @@ const votings = async (root, args, { currentvote }) => {
 };
 
 const pointsForScheese = async (root, args, ctx) => {
-  const points = await db("votings").sum("points");
+  const points = await db('votings').sum('points');
 
   console.log(
-    "------ !!!!!! ------ points ------ !!!!!! ------",
+    '------ !!!!!! ------ points ------ !!!!!! ------',
     new Date(),
     points
   );
@@ -40,7 +40,7 @@ const pointsForScheese = async (root, args, ctx) => {
 };
 
 const voteById = async (root, args, ctx) => {
-  const vote = await db("vote")
+  const vote = await db('vote')
     .where({ id: args.id })
     .first();
 
@@ -48,19 +48,19 @@ const voteById = async (root, args, ctx) => {
 };
 
 const votingsForScheeseVotingOne = async (root, args, ctx) => {
-  const v = await db("votings").where({ scheese_id: args.scheeseId });
+  const v = await db('votings').where({ scheese_id: args.scheeseId });
 
   return v;
 };
 
 const votingsForScheeseVotingTwo = async (root, args, ctx) => {
-  const v = await db("votings_2").where({ scheese_id: args.scheeseId });
+  const v = await db('votings_2').where({ scheese_id: args.scheeseId });
 
   return v;
 };
 
 const votingsForScheeseVotingThree = async (root, args, ctx) => {
-  const v = await db("votings_3").where({ scheese_id: args.scheeseId });
+  const v = await db('votings_3').where({ scheese_id: args.scheeseId });
 
   return v;
 };
@@ -77,22 +77,22 @@ function comparePoints(a, b) {
 
 const allVotes = async (root, args, ctx) => {
   // Divide SUM by COUNT
-  console.log("allVotes");
+  console.log('allVotes');
   const votes = await db.raw(
-    "SELECT DISTINCT scheese_id, points_total from (SELECT scheese_id, points, SUM(points) over (partition by scheese_id) as points_total FROM votings order by scheese_id) AS x;"
+    'SELECT DISTINCT scheese_id, points_total from (SELECT scheese_id, points, SUM(points) over (partition by scheese_id) as points_total FROM votings order by scheese_id) AS x;'
   );
 
   const votings = await db
-    .table("votings")
-    .select("*")
+    .table('votings')
+    .select('*')
     .then((rows) => {
       return rows;
     });
 
-  console.log("votings:", votings.length);
+  console.log('votings:', votings.length);
 
   // TODO: Get sum of votes for one scheese. Divide points for scheese by sum of votes for scheese.
-  console.log("votes:", votes.rows.sort(comparePoints));
+  console.log('votes:', votes.rows.sort(comparePoints));
 
   const sidArr = [];
 
@@ -102,9 +102,9 @@ const allVotes = async (root, args, ctx) => {
 
   const uniq = [...new Set(sidArr)];
 
-  console.log("sidArr: ", sidArr);
+  console.log('sidArr: ', sidArr);
 
-  console.log("uniq:", uniq);
+  console.log('uniq:', uniq);
 
   const uniqObj = uniq.map((u) => ({
     scheeseId: u,
@@ -119,7 +119,7 @@ const allVotes = async (root, args, ctx) => {
     }
   }
 
-  console.log("uniqObj: ", uniqObj);
+  console.log('uniqObj: ', uniqObj);
 
   const result = votes.rows
     .map((v) => ({
@@ -136,7 +136,7 @@ const allVotes = async (root, args, ctx) => {
     }
   }
 
-  console.log("result: ", result);
+  console.log('result: ', result);
 
   return result;
 };
@@ -144,20 +144,20 @@ const allVotes = async (root, args, ctx) => {
 const allVotesVoting2 = async (root, args, ctx) => {
   // Divide SUM by COUNT
   const votes = await db.raw(
-    "SELECT DISTINCT scheese_id, points_total from (SELECT scheese_id, points, SUM(points) over (partition by scheese_id) as points_total FROM votings_2 order by scheese_id) AS x;"
+    'SELECT DISTINCT scheese_id, points_total from (SELECT scheese_id, points, SUM(points) over (partition by scheese_id) as points_total FROM votings_2 order by scheese_id) AS x;'
   );
 
   const votings = await db
-    .table("votings_2")
-    .select("*")
+    .table('votings_2')
+    .select('*')
     .then((rows) => {
       return rows;
     });
 
-  console.log("votings:", votings.length);
+  console.log('votings:', votings.length);
 
   // TODO: Get sum of votes for one scheese. Divide points for scheese by sum of votes for scheese.
-  console.log("votes:", votes.rows.sort(comparePoints));
+  console.log('votes:', votes.rows.sort(comparePoints));
 
   const sidArr = [];
 
@@ -167,9 +167,9 @@ const allVotesVoting2 = async (root, args, ctx) => {
 
   const uniq = [...new Set(sidArr)];
 
-  console.log("sidArr: ", sidArr);
+  console.log('sidArr: ', sidArr);
 
-  console.log("uniq:", uniq);
+  console.log('uniq:', uniq);
 
   const uniqObj = uniq.map((u) => ({
     scheeseId: u,
@@ -184,7 +184,7 @@ const allVotesVoting2 = async (root, args, ctx) => {
     }
   }
 
-  console.log("uniqObj: ", uniqObj);
+  console.log('uniqObj: ', uniqObj);
 
   const result = votes.rows
     .map((v) => ({
@@ -201,7 +201,7 @@ const allVotesVoting2 = async (root, args, ctx) => {
     }
   }
 
-  console.log("result: ", result);
+  console.log('result: ', result);
 
   return result;
 };
@@ -209,20 +209,20 @@ const allVotesVoting2 = async (root, args, ctx) => {
 const allVotesVoting3 = async (root, args, ctx) => {
   // Divide SUM by COUNT
   const votes = await db.raw(
-    "SELECT DISTINCT scheese_id, points_total from (SELECT scheese_id, points, SUM(points) over (partition by scheese_id) as points_total FROM votings_3 order by scheese_id) AS x;"
+    'SELECT DISTINCT scheese_id, points_total from (SELECT scheese_id, points, SUM(points) over (partition by scheese_id) as points_total FROM votings_3 order by scheese_id) AS x;'
   );
 
   const votings = await db
-    .table("votings_3")
-    .select("*")
+    .table('votings_3')
+    .select('*')
     .then((rows) => {
       return rows;
     });
 
-  console.log("votings:", votings.length);
+  console.log('votings:', votings.length);
 
   // TODO: Get sum of votes for one scheese. Divide points for scheese by sum of votes for scheese.
-  console.log("votes:", votes.rows.sort(comparePoints));
+  console.log('votes:', votes.rows.sort(comparePoints));
 
   const sidArr = [];
 
@@ -232,9 +232,9 @@ const allVotesVoting3 = async (root, args, ctx) => {
 
   const uniq = [...new Set(sidArr)];
 
-  console.log("sidArr: ", sidArr);
+  console.log('sidArr: ', sidArr);
 
-  console.log("uniq:", uniq);
+  console.log('uniq:', uniq);
 
   const uniqObj = uniq.map((u) => ({
     scheeseId: u,
@@ -249,7 +249,7 @@ const allVotesVoting3 = async (root, args, ctx) => {
     }
   }
 
-  console.log("uniqObj: ", uniqObj);
+  console.log('uniqObj: ', uniqObj);
 
   const result = votes.rows
     .map((v) => ({
@@ -266,33 +266,33 @@ const allVotesVoting3 = async (root, args, ctx) => {
     }
   }
 
-  console.log("result: ", result);
+  console.log('result: ', result);
 
   return result;
 };
 
 const votingOneByVoterCode = async (root, args, ctx) => {
   try {
-    console.log("args: ", args);
+    console.log('args: ', args);
 
-    const v = await db("votings")
-      .select("*")
+    const v = await db('votings')
+      .select('*')
       .where({ voter_hash: args.voter_hash })
       .then((rows) => {
-        console.log("rows:", rows);
+        console.log('rows:', rows);
         return rows;
       });
 
-    console.log(new Date() + "v: " + v);
+    console.log(new Date() + 'v: ' + v);
     return v;
   } catch (e) {
-    console.log("Error in votingOneByVoterCode:", new Date() + ": " + e);
+    console.log('Error in votingOneByVoterCode:', new Date() + ': ' + e);
   }
 };
 
 const votingTwoByVoterCode = async (root, args, ctx) => {
-  const v = await db("votings_2")
-    .select("*")
+  const v = await db('votings_2')
+    .select('*')
     .where({ voter_hash: args.voter_hash })
     .then((rows) => {
       return rows;
@@ -302,8 +302,8 @@ const votingTwoByVoterCode = async (root, args, ctx) => {
 };
 
 const votingThreeByVoterCode = async (root, args, ctx) => {
-  const v = await db("votings_3")
-    .select("*")
+  const v = await db('votings_3')
+    .select('*')
     .where({ voter_hash: args.voter_hash })
     .then((rows) => {
       return rows;
@@ -314,80 +314,77 @@ const votingThreeByVoterCode = async (root, args, ctx) => {
 
 const addVotes = async (root, args, ctx) => {
   // Delete all Votes with given hash before saving new one
-  console.log("args", args);
-  const delData = await db("votings")
-    .where("voter_hash", args.votes[0].voter_hash)
+  console.log('args', args);
+  const delData = await db('votings')
+    .where('voter_hash', args.votes[0].voter_hash)
     .del();
 
   const data = await db
     .insert([...args.votes])
-    .returning("voter_hash")
-    .into("votings")
+    .returning('voter_hash')
+    .into('votings')
     .then(async (voterHash) => {
-      const createdVotes = await db("votings")
-        .select("*")
-        .where({ voter_hash: voterHash.toString() })
-        .first();
+      const createdVotes = await db('votings')
+        .select('*')
+        .where({ voter_hash: voterHash.toString() });
 
-      console.log("createdVote", createdVotes);
+      console.log('createdVote', createdVotes);
       return createdVotes;
     });
 
-  console.log("addVotes data", data);
+  console.log('addVotes data', data);
   return data;
 };
 
 const addVotesVoting2 = async (root, args, ctx) => {
   // Delete all Votes with given hash before saving new one
-  console.log("args", args);
-  const delData = await db("votings_2")
-    .where("voter_hash", args.votes[0].voter_hash)
+  console.log('args', args);
+  const delData = await db('votings_2')
+    .where('voter_hash', args.votes[0].voter_hash)
     .del();
 
-  console.log("delData", delData);
-  console.log("args.votes", args.votes);
+  console.log('delData', delData);
+  console.log('args.votes', args.votes);
   const data = await db
     .insert([...args.votes])
-    .returning("voter_hash")
-    .into("votings_2")
+    .returning('voter_hash')
+    .into('votings_2')
     .then(async (voterHash) => {
-      const createdVotes = await db("votings_2")
-        .select("*")
-        .where({ voter_hash: voterHash.toString() })
-        .first();
+      const createdVotes = await db('votings_2')
+        .select('*')
+        .where({ voter_hash: voterHash.toString() });
 
-      console.log("createdVote", createdVotes);
+      console.log('createdVote', createdVotes);
       return createdVotes;
     });
 
-  console.log("addVotes data", data);
+  console.log('addVotes data', data);
   return data;
 };
 
 const addVotesVoting3 = async (root, args, ctx) => {
   // Delete all Votes with given hash before saving new one
-  console.log("args", args);
-  const delData = await db("votings_3")
-    .where("voter_hash", args.votes[0].voter_hash)
+  console.log('args', args);
+  const delData = await db('votings_3')
+    .where('voter_hash', args.votes[0].voter_hash)
     .del();
 
-  console.log("delData", delData);
-  console.log("args.votes", args.votes);
+  console.log('delData', delData);
+  console.log('args.votes', args.votes);
   const data = await db
     .insert([...args.votes])
-    .returning("voter_hash")
-    .into("votings_3")
+    .returning('voter_hash')
+    .into('votings_3')
     .then(async (voterHash) => {
-      const createdVotes = await db("votings_3")
-        .select("*")
-        .where({ voter_hash: voterHash.toString() })
-        .first();
+      const createdVotes = await db('votings_3')
+        .select('*')
+        .where({ voter_hash: voterHash.toString() });
 
-      console.log("createdVote", createdVotes);
+      console.log('createdVote', createdVotes);
       return createdVotes;
     });
 
-  console.log("addVotes data", data);
+  console.log('addVotes data', data);
   return data;
 };
 

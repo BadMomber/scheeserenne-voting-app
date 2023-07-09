@@ -35,13 +35,13 @@
           <!-- https://sortablejs.github.io/Vue.Draggable/#/transition-example-2 -->
           <div v-if="ratedScheese.length === 0" class="p-2">
             <h6 class="center red">
-              Ziehen sie die Scheese zum bewerten hier hin.
+              Ziehen Sie die Scheese zum bewerten hier hin.
             </h6>
             <h5 class="center">&#8595;</h5>
           </div>
           <div v-else>
             <h5 class="center">
-              Wählen Sie ihre liebsten drei Scheesen! (mind. 2)
+              Wählen Sie ihre liebsten drei Scheesen!
             </h5>
           </div>
           <draggable

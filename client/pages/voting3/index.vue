@@ -484,6 +484,8 @@ export default {
           const votes = [];
 
           this.ratedScheese.forEach(async (scheese, index) => {
+            const maxPoints = 4;
+
             const v = {
               scheeseId: scheese.id,
               voter_hash: this.voter_hash.toLowerCase(),
